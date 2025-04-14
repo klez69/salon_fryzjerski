@@ -1,409 +1,455 @@
 <!DOCTYPE html>
 <html lang="pl">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Statystyki - Panel Administracyjny</title>
-		<link rel="stylesheet" href="admin-style.css" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-			rel="stylesheet"
-		/>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" />
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-		<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
-		<style>
-			body {
-				display: none; /* Ukryj treść na początku, zostanie pokazana po sprawdzeniu logowania */
-			}
-		</style>
-	</head>
-	<body>
-		<div class="dashboard-container">
-			<!-- Sidebar -->
-			<div class="sidebar">
-				<div class="logo">
-					<i class="fas fa-spa"></i>
-					<span>BeautyAdmin</span>
-				</div>
-				<div class="sidebar-nav">
-					<ul>
-						<li>
-							<a href="dashboard.html">
-								<i class="fas fa-tachometer-alt"></i>
-								<span>Dashboard</span>
-							</a>
-						</li>
-						<li>
-							<a href="calendar.html">
-								<i class="fas fa-calendar-alt"></i>
-								<span>Kalendarz</span>
-							</a>
-						</li>
-						<li>
-							<a href="clients.html">
-								<i class="fas fa-users"></i>
-								<span>Klienci</span>
-							</a>
-						</li>
-						<li>
-							<a href="services.html">
-								<i class="fas fa-list-alt"></i>
-								<span>Usługi</span>
-							</a>
-						</li>
-						<li class="active">
-							<a href="statistics.html">
-								<i class="fas fa-chart-bar"></i>
-								<span>Statystyki</span>
-							</a>
-						</li>
-						<li>
-							<a href="settings.html">
-								<i class="fas fa-cog"></i>
-								<span>Ustawienia</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-				<div class="sidebar-footer">
-					<a href="../nail-salon-template.html">
-						<i class="fas fa-sign-out-alt"></i>
-						<span>Powrót do strony</span>
-					</a>
-				</div>
-			</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statystyki - Panel Administracyjny</title>
+    <link rel="stylesheet" href="admin-style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
+    <style>
+      body {
+        display: none; /* Ukryj treść na początku, zostanie pokazana po sprawdzeniu logowania */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="logo">
+          <i class="fas fa-spa"></i>
+          <span>BeautyAdmin</span>
+        </div>
+        <div class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="calendar.html">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Kalendarz</span>
+              </a>
+            </li>
+            <li>
+              <a href="clients.html">
+                <i class="fas fa-users"></i>
+                <span>Klienci</span>
+              </a>
+            </li>
+            <li>
+              <a href="services.html">
+                <i class="fas fa-list-alt"></i>
+                <span>Usługi</span>
+              </a>
+            </li>
+            <li class="active">
+              <a href="statistics.html">
+                <i class="fas fa-chart-bar"></i>
+                <span>Statystyki</span>
+              </a>
+            </li>
+            <li>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i>
+                <span>Ustawienia</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="sidebar-footer">
+          <a href="../nail-salon-template.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Powrót do strony</span>
+          </a>
+        </div>
+      </div>
 
-			<!-- Main Content -->
-			<div class="main-content">
-				<div class="main-header">
-					<div class="header-search">
-						<i class="fas fa-search"></i>
-						<input type="text" placeholder="Szukaj..." />
-					</div>
-					<div class="header-user">
-						<div class="notifications">
-							<i class="fas fa-bell"></i>
-							<span class="notification-badge">3</span>
-						</div>
-						<div class="user-info">
-							<span>Admin</span>
-							<img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Admin" />
-						</div>
-					</div>
-				</div>
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="main-header">
+          <div class="header-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Szukaj..." />
+          </div>
+          <div class="header-user">
+            <div class="notifications">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </div>
+            <div class="user-info">
+              <span>Admin</span>
+              <img src="" alt="Admin" />
+            </div>
+          </div>
+        </div>
 
-				<div class="dashboard-content">
-					<h1>Statystyki</h1>
+        <div class="dashboard-content">
+          <h1>Statystyki</h1>
 
-					<div class="statistics-filters">
-						<div class="filter-group">
-							<label for="period">Okres:</label>
-							<select id="period" class="form-control">
-								<option value="7">Ostatnie 7 dni</option>
-								<option value="30" selected>Ostatnie 30 dni</option>
-								<option value="90">Ostatnie 90 dni</option>
-								<option value="365">Ostatni rok</option>
-							</select>
-						</div>
-						<button class="btn btn-primary" id="refreshStats"><i class="fas fa-sync-alt"></i> Odśwież</button>
-					</div>
+          <div class="statistics-filters">
+            <div class="filter-group">
+              <label for="period">Okres:</label>
+              <select id="period" class="form-control">
+                <option value="7">Ostatnie 7 dni</option>
+                <option value="30" selected>Ostatnie 30 dni</option>
+                <option value="90">Ostatnie 90 dni</option>
+                <option value="365">Ostatni rok</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="refreshStats">
+              <i class="fas fa-sync-alt"></i> Odśwież
+            </button>
+          </div>
 
-					<div class="stats-overview">
-						<div class="dashboard-card stats-card">
-							<div class="stats-icon bg-primary">
-								<i class="fas fa-user-plus"></i>
-							</div>
-							<div class="stats-info">
-								<h3>Nowych klientów</h3>
-								<p class="stats-value">24</p>
-								<div class="stats-trend positive"><i class="fas fa-arrow-up"></i> 12% od ostatniego miesiąca</div>
-							</div>
-						</div>
+          <div class="stats-overview">
+            <div class="dashboard-card stats-card">
+              <div class="stats-icon bg-primary">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <div class="stats-info">
+                <h3>Nowych klientów</h3>
+                <p class="stats-value">24</p>
+                <div class="stats-trend positive">
+                  <i class="fas fa-arrow-up"></i> 12% od ostatniego miesiąca
+                </div>
+              </div>
+            </div>
 
-						<div class="dashboard-card stats-card">
-							<div class="stats-icon bg-success">
-								<i class="fas fa-calendar-check"></i>
-							</div>
-							<div class="stats-info">
-								<h3>Rezerwacji</h3>
-								<p class="stats-value">156</p>
-								<div class="stats-trend positive"><i class="fas fa-arrow-up"></i> 8% od ostatniego miesiąca</div>
-							</div>
-						</div>
+            <div class="dashboard-card stats-card">
+              <div class="stats-icon bg-success">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div class="stats-info">
+                <h3>Rezerwacji</h3>
+                <p class="stats-value">156</p>
+                <div class="stats-trend positive">
+                  <i class="fas fa-arrow-up"></i> 8% od ostatniego miesiąca
+                </div>
+              </div>
+            </div>
 
-						<div class="dashboard-card stats-card">
-							<div class="stats-icon bg-info">
-								<i class="fas fa-coins"></i>
-							</div>
-							<div class="stats-info">
-								<h3>Przychód</h3>
-								<p class="stats-value">14 520 zł</p>
-								<div class="stats-trend positive"><i class="fas fa-arrow-up"></i> 15% od ostatniego miesiąca</div>
-							</div>
-						</div>
+            <div class="dashboard-card stats-card">
+              <div class="stats-icon bg-info">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="stats-info">
+                <h3>Przychód</h3>
+                <p class="stats-value">14 520 zł</p>
+                <div class="stats-trend positive">
+                  <i class="fas fa-arrow-up"></i> 15% od ostatniego miesiąca
+                </div>
+              </div>
+            </div>
 
-						<div class="dashboard-card stats-card">
-							<div class="stats-icon bg-warning">
-								<i class="fas fa-star"></i>
-							</div>
-							<div class="stats-info">
-								<h3>Średnia ocena</h3>
-								<p class="stats-value">4.8</p>
-								<div class="stats-trend neutral"><i class="fas fa-equals"></i> Bez zmian</div>
-							</div>
-						</div>
-					</div>
+            <div class="dashboard-card stats-card">
+              <div class="stats-icon bg-warning">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="stats-info">
+                <h3>Średnia ocena</h3>
+                <p class="stats-value">4.8</p>
+                <div class="stats-trend neutral">
+                  <i class="fas fa-equals"></i> Bez zmian
+                </div>
+              </div>
+            </div>
+          </div>
 
-					<div class="charts-container">
-						<div class="dashboard-card full-width">
-							<h2>Rezerwacje w czasie</h2>
-							<div class="chart-container">
-								<canvas id="appointmentsChart"></canvas>
-							</div>
-						</div>
+          <div class="charts-container">
+            <div class="dashboard-card full-width">
+              <h2>Rezerwacje w czasie</h2>
+              <div class="chart-container">
+                <canvas id="appointmentsChart"></canvas>
+              </div>
+            </div>
 
-						<div class="charts-row">
-							<div class="dashboard-card half-width">
-								<h2>Popularne usługi</h2>
-								<div class="chart-container">
-									<canvas id="servicesChart"></canvas>
-								</div>
-							</div>
+            <div class="charts-row">
+              <div class="dashboard-card half-width">
+                <h2>Popularne usługi</h2>
+                <div class="chart-container">
+                  <canvas id="servicesChart"></canvas>
+                </div>
+              </div>
 
-							<div class="dashboard-card half-width">
-								<h2>Odwiedziny strony</h2>
-								<div class="chart-container">
-									<canvas id="visitsChart"></canvas>
-								</div>
-							</div>
-						</div>
-					</div>
+              <div class="dashboard-card half-width">
+                <h2>Odwiedziny strony</h2>
+                <div class="chart-container">
+                  <canvas id="visitsChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
 
-					<div class="dashboard-card full-width">
-						<h2>Źródła ruchu na stronie</h2>
-						<div class="stats-table-container">
-							<table class="stats-table">
-								<thead>
-									<tr>
-										<th>Źródło</th>
-										<th>Użytkownicy</th>
-										<th>Nowi użytkownicy</th>
-										<th>Sesje</th>
-										<th>Współczynnik konwersji</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Google</td>
-										<td>1,523</td>
-										<td>1,102</td>
-										<td>1,896</td>
-										<td>5.2%</td>
-									</tr>
-									<tr>
-										<td>Instagram</td>
-										<td>963</td>
-										<td>742</td>
-										<td>1,164</td>
-										<td>7.8%</td>
-									</tr>
-									<tr>
-										<td>Facebook</td>
-										<td>854</td>
-										<td>623</td>
-										<td>1,047</td>
-										<td>6.3%</td>
-									</tr>
-									<tr>
-										<td>Bezpośrednie</td>
-										<td>721</td>
-										<td>324</td>
-										<td>896</td>
-										<td>9.1%</td>
-									</tr>
-									<tr>
-										<td>Pinterest</td>
-										<td>432</td>
-										<td>321</td>
-										<td>587</td>
-										<td>4.2%</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+          <div class="dashboard-card full-width">
+            <h2>Źródła ruchu na stronie</h2>
+            <div class="stats-table-container">
+              <table class="stats-table">
+                <thead>
+                  <tr>
+                    <th>Źródło</th>
+                    <th>Użytkownicy</th>
+                    <th>Nowi użytkownicy</th>
+                    <th>Sesje</th>
+                    <th>Współczynnik konwersji</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Google</td>
+                    <td>1,523</td>
+                    <td>1,102</td>
+                    <td>1,896</td>
+                    <td>5.2%</td>
+                  </tr>
+                  <tr>
+                    <td>Instagram</td>
+                    <td>963</td>
+                    <td>742</td>
+                    <td>1,164</td>
+                    <td>7.8%</td>
+                  </tr>
+                  <tr>
+                    <td>Facebook</td>
+                    <td>854</td>
+                    <td>623</td>
+                    <td>1,047</td>
+                    <td>6.3%</td>
+                  </tr>
+                  <tr>
+                    <td>Bezpośrednie</td>
+                    <td>721</td>
+                    <td>324</td>
+                    <td>896</td>
+                    <td>9.1%</td>
+                  </tr>
+                  <tr>
+                    <td>Pinterest</td>
+                    <td>432</td>
+                    <td>321</td>
+                    <td>587</td>
+                    <td>4.2%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<script>
-			// Sprawdź, czy użytkownik jest zalogowany
-			window.onload = function () {
-				const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true'
-				if (!isLoggedIn) {
-					console.log('Użytkownik nie jest zalogowany, przekierowuję do strony logowania')
-					window.location.href = 'login.html'
-				} else {
-					console.log('Użytkownik zalogowany, wyświetlam panel')
-					document.body.style.display = 'block'
-				}
-			}
+    <script>
+      // Sprawdź, czy użytkownik jest zalogowany
+      window.onload = function () {
+        const isLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
+        if (!isLoggedIn) {
+          console.log(
+            "Użytkownik nie jest zalogowany, przekierowuję do strony logowania"
+          );
+          window.location.href = "login.html";
+        } else {
+          console.log("Użytkownik zalogowany, wyświetlam panel");
+          document.body.style.display = "block";
+        }
+      };
 
-			// Dodaj obsługę wylogowania
-			document.addEventListener('DOMContentLoaded', function () {
-				const logoutLinks = document.querySelectorAll("a[href='login.html']")
-				logoutLinks.forEach(link => {
-					link.addEventListener('click', function (e) {
-						localStorage.removeItem('adminLoggedIn')
-						console.log('Wylogowanie')
-					})
-				})
-			})
+      // Dodaj obsługę wylogowania
+      document.addEventListener("DOMContentLoaded", function () {
+        const logoutLinks = document.querySelectorAll("a[href='login.html']");
+        logoutLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            localStorage.removeItem("adminLoggedIn");
+            console.log("Wylogowanie");
+          });
+        });
+      });
 
-			document.addEventListener('DOMContentLoaded', function () {
-				// Appointments Chart
-				const appointmentsCtx = document.getElementById('appointmentsChart').getContext('2d')
-				const appointmentsChart = new Chart(appointmentsCtx, {
-					type: 'line',
-					data: {
-						labels: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec'],
-						datasets: [
-							{
-								label: 'Rezerwacje',
-								data: [92, 108, 125, 137, 146, 156],
-								backgroundColor: 'rgba(231, 76, 140, 0.2)',
-								borderColor: 'rgba(231, 76, 140, 1)',
-								borderWidth: 2,
-								tension: 0.3,
-								pointBackgroundColor: 'rgba(231, 76, 140, 1)',
-								pointRadius: 4,
-							},
-						],
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						scales: {
-							y: {
-								beginAtZero: true,
-								grid: {
-									color: 'rgba(200, 200, 200, 0.2)',
-								},
-							},
-							x: {
-								grid: {
-									display: false,
-								},
-							},
-						},
-						plugins: {
-							legend: {
-								display: false,
-							},
-						},
-					},
-				})
+      document.addEventListener("DOMContentLoaded", function () {
+        // Appointments Chart
+        const appointmentsCtx = document
+          .getElementById("appointmentsChart")
+          .getContext("2d");
+        const appointmentsChart = new Chart(appointmentsCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "Styczeń",
+              "Luty",
+              "Marzec",
+              "Kwiecień",
+              "Maj",
+              "Czerwiec",
+            ],
+            datasets: [
+              {
+                label: "Rezerwacje",
+                data: [92, 108, 125, 137, 146, 156],
+                backgroundColor: "rgba(231, 76, 140, 0.2)",
+                borderColor: "rgba(231, 76, 140, 1)",
+                borderWidth: 2,
+                tension: 0.3,
+                pointBackgroundColor: "rgba(231, 76, 140, 1)",
+                pointRadius: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(200, 200, 200, 0.2)",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
 
-				// Services Chart
-				const servicesCtx = document.getElementById('servicesChart').getContext('2d')
-				const servicesChart = new Chart(servicesCtx, {
-					type: 'doughnut',
-					data: {
-						labels: ['Manicure hybrydowy', 'Pedicure hybrydowy', 'Przedłużanie paznokci', 'Stylizacja brwi', 'Inne'],
-						datasets: [
-							{
-								data: [45, 25, 15, 10, 5],
-								backgroundColor: [
-									'rgba(231, 76, 140, 0.8)',
-									'rgba(76, 134, 231, 0.8)',
-									'rgba(76, 231, 140, 0.8)',
-									'rgba(231, 206, 76, 0.8)',
-									'rgba(180, 180, 180, 0.8)',
-								],
-								borderColor: [
-									'rgba(231, 76, 140, 1)',
-									'rgba(76, 134, 231, 1)',
-									'rgba(76, 231, 140, 1)',
-									'rgba(231, 206, 76, 1)',
-									'rgba(180, 180, 180, 1)',
-								],
-								borderWidth: 1,
-							},
-						],
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						plugins: {
-							legend: {
-								position: 'right',
-							},
-						},
-						cutout: '60%',
-					},
-				})
+        // Services Chart
+        const servicesCtx = document
+          .getElementById("servicesChart")
+          .getContext("2d");
+        const servicesChart = new Chart(servicesCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Manicure hybrydowy",
+              "Pedicure hybrydowy",
+              "Przedłużanie paznokci",
+              "Stylizacja brwi",
+              "Inne",
+            ],
+            datasets: [
+              {
+                data: [45, 25, 15, 10, 5],
+                backgroundColor: [
+                  "rgba(231, 76, 140, 0.8)",
+                  "rgba(76, 134, 231, 0.8)",
+                  "rgba(76, 231, 140, 0.8)",
+                  "rgba(231, 206, 76, 0.8)",
+                  "rgba(180, 180, 180, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(231, 76, 140, 1)",
+                  "rgba(76, 134, 231, 1)",
+                  "rgba(76, 231, 140, 1)",
+                  "rgba(231, 206, 76, 1)",
+                  "rgba(180, 180, 180, 1)",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right",
+              },
+            },
+            cutout: "60%",
+          },
+        });
 
-				// Visits Chart
-				const visitsCtx = document.getElementById('visitsChart').getContext('2d')
-				const visitsChart = new Chart(visitsCtx, {
-					type: 'bar',
-					data: {
-						labels: ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd'],
-						datasets: [
-							{
-								label: 'Odwiedziny',
-								data: [125, 132, 121, 154, 178, 214, 193],
-								backgroundColor: 'rgba(76, 134, 231, 0.8)',
-								borderColor: 'rgba(76, 134, 231, 1)',
-								borderWidth: 1,
-								borderRadius: 4,
-							},
-						],
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						scales: {
-							y: {
-								beginAtZero: true,
-								grid: {
-									color: 'rgba(200, 200, 200, 0.2)',
-								},
-							},
-							x: {
-								grid: {
-									display: false,
-								},
-							},
-						},
-						plugins: {
-							legend: {
-								display: false,
-							},
-						},
-					},
-				})
+        // Visits Chart
+        const visitsCtx = document
+          .getElementById("visitsChart")
+          .getContext("2d");
+        const visitsChart = new Chart(visitsCtx, {
+          type: "bar",
+          data: {
+            labels: ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nd"],
+            datasets: [
+              {
+                label: "Odwiedziny",
+                data: [125, 132, 121, 154, 178, 214, 193],
+                backgroundColor: "rgba(76, 134, 231, 0.8)",
+                borderColor: "rgba(76, 134, 231, 1)",
+                borderWidth: 1,
+                borderRadius: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(200, 200, 200, 0.2)",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
 
-				// Period change
-				document.getElementById('period').addEventListener('change', function () {
-					// In a real application, this would fetch data for the selected period
-					alert('Zmieniono okres na: ' + this.options[this.selectedIndex].text)
-				})
+        // Period change
+        document
+          .getElementById("period")
+          .addEventListener("change", function () {
+            // In a real application, this would fetch data for the selected period
+            alert(
+              "Zmieniono okres na: " + this.options[this.selectedIndex].text
+            );
+          });
 
-				// Refresh stats
-				document.getElementById('refreshStats').addEventListener('click', function () {
-					this.classList.add('refreshing')
-					setTimeout(() => {
-						this.classList.remove('refreshing')
-						alert('Statystyki zostały odświeżone!')
-					}, 1500)
-				})
-			})
-		</script>
-	</body>
+        // Refresh stats
+        document
+          .getElementById("refreshStats")
+          .addEventListener("click", function () {
+            this.classList.add("refreshing");
+            setTimeout(() => {
+              this.classList.remove("refreshing");
+              alert("Statystyki zostały odświeżone!");
+            }, 1500);
+          });
+      });
+    </script>
+  </body>
 </html>

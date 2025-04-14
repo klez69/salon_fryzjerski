@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Administracyjny - Ustawienia</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="admin-style.css" />
+    <style>
+      .settings-section {
+        margin-bottom: 30px;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 20px;
+      }
+
+      .settings-section:last-child {
+        border-bottom: none;
+      }
+
+      .setting-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px 0;
+      }
+
+      .setting-label {
+        flex: 0 0 200px;
+        font-weight: 500;
+        color: var(--dark);
+      }
+
+      .setting-control {
+        flex: 1;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
+
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .toggle-slider {
+        background-color: var(--primary);
+      }
+
+      input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+      }
+
+      .color-picker {
+        display: flex;
+        gap: 10px;
+      }
+
+      .color-option {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s;
+        border: 2px solid transparent;
+      }
+
+      .color-option:hover {
+        transform: scale(1.1);
+      }
+
+      .color-option.active {
+        border: 2px solid #333;
+      }
+
+      .primary-color {
+        background-color: #4361ee;
+      }
+
+      .accent-color {
+        background-color: #3a0ca3;
+      }
+
+      .success-color {
+        background-color: #2fdf75;
+      }
+
+      .warning-color {
+        background-color: #ffd534;
+      }
+
+      .danger-color {
+        background-color: #f45b69;
+      }
+
+      .custom-color {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .help-text {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .backup-btn {
+        margin-right: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .setting-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .setting-label {
+          margin-bottom: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="logo">
+          <i class="fas fa-spa"></i>
+          <span>BeautyAdmin</span>
+        </div>
+        <div class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="calendar.html">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Kalendarz</span>
+              </a>
+            </li>
+            <li>
+              <a href="clients.html">
+                <i class="fas fa-users"></i>
+                <span>Klienci</span>
+              </a>
+            </li>
+            <li>
+              <a href="services.html">
+                <i class="fas fa-list-alt"></i>
+                <span>Usługi</span>
+              </a>
+            </li>
+            <li>
+              <a href="statistics.html">
+                <i class="fas fa-chart-bar"></i>
+                <span>Statystyki</span>
+              </a>
+            </li>
+            <li class="active">
+              <a href="settings.html">
+                <i class="fas fa-cog"></i>
+                <span>Ustawienia</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="sidebar-footer">
+          <a href="../nail-salon-template.html">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Powrót do strony</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="main-header">
+          <div class="header-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Szukaj..." />
+          </div>
+          <div class="header-user">
+            <div class="notifications">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </div>
+            <div class="user-info">
+              <span>Admin</span>
+              <img src="" alt="Admin" />
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-content">
+          <h1>Ustawienia</h1>
+
+          <div class="dashboard-card full-width">
+            <div class="card-header">
+              <h3>Ustawienia systemu</h3>
+              <div class="card-actions">
+                <button class="btn btn-primary" id="save-settings">
+                  <i class="fas fa-save"></i> Zapisz zmiany
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="settings-form">
+                <!-- Ogólne -->
+                <div class="settings-section">
+                  <h4>Ogólne</h4>
+                  <div class="setting-item">
+                    <div class="setting-label">Nazwa salonu</div>
+                    <div class="setting-control">
+                      <input
+                        type="text"
+                        class="form-control"
+                        value="Beauty Salon"
+                      />
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">Adres e-mail</div>
+                    <div class="setting-control">
+                      <input
+                        type="email"
+                        class="form-control"
+                        value="kontakt@beautysalon.pl"
+                      />
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">Telefon kontaktowy</div>
+                    <div class="setting-control">
+                      <input
+                        type="text"
+                        class="form-control"
+                        value="+48 123 456 789"
+                      />
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">Adres salonu</div>
+                    <div class="setting-control">
+                      <textarea class="form-control" rows="2">
+ul. Przykładowa 10, 00-001 Warszawa</textarea
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Rezerwacje -->
+                <div class="settings-section">
+                  <h4>Rezerwacje</h4>
+                  <div class="setting-item">
+                    <div class="setting-label">
+                      Maksymalna liczba rezerwacji dziennie
+                    </div>
+                    <div class="setting-control">
+                      <input
+                        type="number"
+                        class="form-control"
+                        value="15"
+                        min="1"
+                        max="50"
+                      />
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">
+                      Czas na potwierdzenie rezerwacji (godziny)
+                    </div>
+                    <div class="setting-control">
+                      <input
+                        type="number"
+                        class="form-control"
+                        value="24"
+                        min="1"
+                        max="72"
+                      />
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">
+                      Minimum dni przed rezerwacją
+                    </div>
+                    <div class="setting-control">
+                      <input
+                        type="number"
+                        class="form-control"
+                        value="1"
+                        min="0"
+                        max="30"
+                      />
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">
+                      Maksimum dni do przodu dla rezerwacji
+                    </div>
+                    <div class="setting-control">
+                      <input
+                        type="number"
+                        class="form-control"
+                        value="30"
+                        min="7"
+                        max="90"
+                      />
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">
+                      Automatyczne potwierdzanie rezerwacji
+                    </div>
+                    <div class="setting-control">
+                      <label class="toggle-switch">
+                        <input type="checkbox" checked />
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">Powiadomienia SMS</div>
+                    <div class="setting-control">
+                      <label class="toggle-switch">
+                        <input type="checkbox" checked />
+                        <span class="toggle-slider"></span>
+                      </label>
+                      <p class="help-text">
+                        Włączenie powiadomień SMS o rezerwacjach
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Wygląd -->
+                <div class="settings-section">
+                  <h4>Wygląd</h4>
+                  <div class="setting-item">
+                    <div class="setting-label">Motyw kolorystyczny</div>
+                    <div class="setting-control">
+                      <div class="color-picker">
+                        <div
+                          class="color-option primary-color active"
+                          data-color="#4361ee"
+                        ></div>
+                        <div
+                          class="color-option accent-color"
+                          data-color="#3a0ca3"
+                        ></div>
+                        <div
+                          class="color-option success-color"
+                          data-color="#2fdf75"
+                        ></div>
+                        <div
+                          class="color-option warning-color"
+                          data-color="#ffd534"
+                        ></div>
+                        <div
+                          class="color-option danger-color"
+                          data-color="#f45b69"
+                        ></div>
+                        <div
+                          class="color-option custom-color"
+                          data-color="custom"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">Tryb ciemny</div>
+                    <div class="setting-control">
+                      <label class="toggle-switch">
+                        <input type="checkbox" />
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">Logo salonu</div>
+                    <div class="setting-control">
+                      <input type="file" class="form-control" />
+                      <p class="help-text">
+                        Zalecany format: PNG, max 1MB, 200x200px
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Kopie zapasowe -->
+                <div class="settings-section">
+                  <h4>Kopie zapasowe i dane</h4>
+                  <div class="setting-item">
+                    <div class="setting-label">Automatyczne kopie zapasowe</div>
+                    <div class="setting-control">
+                      <label class="toggle-switch">
+                        <input type="checkbox" checked />
+                        <span class="toggle-slider"></span>
+                      </label>
+                      <p class="help-text">
+                        Tworzenie kopii zapasowych co 7 dni
+                      </p>
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">
+                      Zarządzanie kopiami zapasowymi
+                    </div>
+                    <div class="setting-control">
+                      <button class="btn btn-secondary backup-btn">
+                        Utwórz kopię
+                      </button>
+                      <button class="btn btn-outline">Przywróć dane</button>
+                    </div>
+                  </div>
+                  <div class="setting-item">
+                    <div class="setting-label">Eksport danych</div>
+                    <div class="setting-control">
+                      <button class="btn btn-outline">Eksportuj do CSV</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sprawdź, czy użytkownik jest zalogowany
+      window.onload = function () {
+        const isLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
+        if (!isLoggedIn) {
+          console.log(
+            "Użytkownik nie jest zalogowany, przekierowuję do strony logowania"
+          );
+          window.location.href = "login.html";
+        } else {
+          console.log("Użytkownik zalogowany, wyświetlam panel");
+          document.body.style.display = "block";
+        }
+      };
+
+      // Dodaj obsługę wylogowania
+      document.addEventListener("DOMContentLoaded", function () {
+        const logoutLinks = document.querySelectorAll("a[href='login.html']");
+        logoutLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            localStorage.removeItem("adminLoggedIn");
+            console.log("Wylogowanie");
+          });
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Color picker functionality
+        const colorOptions = document.querySelectorAll(".color-option");
+
+        colorOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            // Remove active class from all options
+            colorOptions.forEach((o) => o.classList.remove("active"));
+
+            // Add active class to selected option
+            this.classList.add("active");
+
+            // Here you would normally apply the theme color
+            const selectedColor = this.dataset.color;
+            console.log("Selected color:", selectedColor);
+
+            // In a real application, you would update CSS variables or apply theme
+            if (selectedColor !== "custom") {
+              document.documentElement.style.setProperty(
+                "--primary",
+                selectedColor
+              );
+            } else {
+              // Show custom color picker (not implemented in this demo)
+              alert("W pełnej wersji tutaj pojawiłby się picker kolorów");
+            }
+          });
+        });
+
+        // Save settings
+        const saveButton = document.getElementById("save-settings");
+        saveButton.addEventListener("click", function () {
+          // Here you would normally save the settings to a database or local storage
+          alert("Ustawienia zostały zapisane!");
+        });
+
+        // Toggle switches
+        const toggleSwitches = document.querySelectorAll(
+          '.toggle-switch input[type="checkbox"]'
+        );
+        toggleSwitches.forEach((toggle) => {
+          toggle.addEventListener("change", function () {
+            const settingName =
+              this.closest(".setting-item").querySelector(
+                ".setting-label"
+              ).textContent;
+            console.log(`Setting "${settingName}" changed to: ${this.checked}`);
+          });
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.querySelector(
+          '.setting-item:nth-of-type(2) input[type="checkbox"]'
+        );
+        darkModeToggle.addEventListener("change", function () {
+          if (this.checked) {
+            document.body.classList.add("dark-mode");
+          } else {
+            document.body.classList.remove("dark-mode");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -148,6 +148,31 @@
           margin-bottom: 8px;
         }
       }
+
+      .save-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transform: translateX(120%);
+        transition: transform 0.3s ease;
+        z-index: 9999;
+      }
+
+      .save-notification.show {
+        transform: translateX(0);
+      }
+
+      .save-notification i {
+        font-size: 18px;
+      }
     </style>
   </head>
   <body>
@@ -199,7 +224,7 @@
           </ul>
         </div>
         <div class="sidebar-footer">
-          <a href="../nail-salon-template.html">
+          <a href="../index.html">
             <i class="fas fa-sign-out-alt"></i>
             <span>Powrót do strony</span>
           </a>
@@ -220,7 +245,10 @@
             </div>
             <div class="user-info">
               <span>Admin</span>
-              <img src="" alt="Admin" />
+              <img
+                src="https://randomuser.me/api/portraits/women/43.jpg"
+                alt="Admin"
+              />
             </div>
           </div>
         </div>
@@ -248,6 +276,7 @@
                       <input
                         type="text"
                         class="form-control"
+                        id="salon-name"
                         value="Beauty Salon"
                       />
                     </div>
@@ -258,6 +287,7 @@
                       <input
                         type="email"
                         class="form-control"
+                        id="salon-email"
                         value="kontakt@beautysalon.pl"
                       />
                     </div>
@@ -268,6 +298,7 @@
                       <input
                         type="text"
                         class="form-control"
+                        id="salon-phone"
                         value="+48 123 456 789"
                       />
                     </div>
@@ -275,7 +306,11 @@
                   <div class="setting-item">
                     <div class="setting-label">Adres salonu</div>
                     <div class="setting-control">
-                      <textarea class="form-control" rows="2">
+                      <textarea
+                        class="form-control"
+                        id="salon-address"
+                        rows="2"
+                      >
 ul. Przykładowa 10, 00-001 Warszawa</textarea
                       >
                     </div>
@@ -293,6 +328,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                       <input
                         type="number"
                         class="form-control"
+                        id="max-daily-bookings"
                         value="15"
                         min="1"
                         max="50"
@@ -307,6 +343,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                       <input
                         type="number"
                         class="form-control"
+                        id="confirmation-hours"
                         value="24"
                         min="1"
                         max="72"
@@ -321,6 +358,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                       <input
                         type="number"
                         class="form-control"
+                        id="min-days-before"
                         value="1"
                         min="0"
                         max="30"
@@ -335,6 +373,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                       <input
                         type="number"
                         class="form-control"
+                        id="max-days-ahead"
                         value="30"
                         min="7"
                         max="90"
@@ -347,7 +386,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                     </div>
                     <div class="setting-control">
                       <label class="toggle-switch">
-                        <input type="checkbox" checked />
+                        <input type="checkbox" id="auto-confirm" checked />
                         <span class="toggle-slider"></span>
                       </label>
                     </div>
@@ -356,7 +395,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                     <div class="setting-label">Powiadomienia SMS</div>
                     <div class="setting-control">
                       <label class="toggle-switch">
-                        <input type="checkbox" checked />
+                        <input type="checkbox" id="sms-notifications" checked />
                         <span class="toggle-slider"></span>
                       </label>
                       <p class="help-text">
@@ -376,35 +415,46 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                         <div
                           class="color-option primary-color active"
                           data-color="#4361ee"
+                          id="color-primary"
                         ></div>
                         <div
                           class="color-option accent-color"
                           data-color="#3a0ca3"
+                          id="color-accent"
                         ></div>
                         <div
                           class="color-option success-color"
                           data-color="#2fdf75"
+                          id="color-success"
                         ></div>
                         <div
                           class="color-option warning-color"
                           data-color="#ffd534"
+                          id="color-warning"
                         ></div>
                         <div
                           class="color-option danger-color"
                           data-color="#f45b69"
+                          id="color-danger"
                         ></div>
                         <div
                           class="color-option custom-color"
                           data-color="custom"
+                          id="color-custom"
                         ></div>
                       </div>
+                      <input
+                        type="hidden"
+                        id="selected-color"
+                        value="#4361ee"
+                      />
                     </div>
                   </div>
                   <div class="setting-item">
                     <div class="setting-label">Tryb ciemny</div>
                     <div class="setting-control">
                       <label class="toggle-switch">
-                        <input type="checkbox" />
+                        <input type="checkbox" id="dark-mode" />
                         <span class="toggle-slider"></span>
                       </label>
                     </div>
@@ -412,7 +462,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                   <div class="setting-item">
                     <div class="setting-label">Logo salonu</div>
                     <div class="setting-control">
-                      <input type="file" class="form-control" />
+                      <input type="file" class="form-control" id="salon-logo" />
                       <p class="help-text">
                         Zalecany format: PNG, max 1MB, 200x200px
                       </p>
@@ -427,7 +477,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
                     <div class="setting-label">Automatyczne kopie zapasowe</div>
                     <div class="setting-control">
                       <label class="toggle-switch">
-                        <input type="checkbox" checked />
+                        <input type="checkbox" id="auto-backup" checked />
                         <span class="toggle-slider"></span>
                       </label>
                       <p class="help-text">
@@ -460,6 +510,12 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
       </div>
     </div>
 
+    <!-- Dodaję powiadomienie o zapisie ustawień -->
+    <div id="save-notification" class="save-notification">
+      <i class="fas fa-check-circle"></i>
+      <span>Ustawienia zostały zapisane!</span>
+    </div>
+
     <script>
       // Sprawdź, czy użytkownik jest zalogowany
       window.onload = function () {
@@ -472,6 +528,9 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
         } else {
           console.log("Użytkownik zalogowany, wyświetlam panel");
           document.body.style.display = "block";
+
+          // Wczytaj zapisane ustawienia
+          loadSettings();
         }
       };
 
@@ -489,6 +548,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
       document.addEventListener("DOMContentLoaded", function () {
         // Color picker functionality
         const colorOptions = document.querySelectorAll(".color-option");
+        const selectedColorInput = document.getElementById("selected-color");
 
         colorOptions.forEach((option) => {
           option.addEventListener("click", function () {
@@ -498,12 +558,12 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
             // Add active class to selected option
             this.classList.add("active");
 
-            // Here you would normally apply the theme color
+            // Get selected color and update hidden input
             const selectedColor = this.dataset.color;
             console.log("Selected color:", selectedColor);
 
-            // In a real application, you would update CSS variables or apply theme
             if (selectedColor !== "custom") {
+              selectedColorInput.value = selectedColor;
               document.documentElement.style.setProperty(
                 "--primary",
                 selectedColor
@@ -518,8 +578,8 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
         // Save settings
         const saveButton = document.getElementById("save-settings");
         saveButton.addEventListener("click", function () {
-          // Here you would normally save the settings to a database or local storage
-          alert("Ustawienia zostały zapisane!");
+          saveSettings();
+          showSaveNotification();
         });
 
         // Toggle switches
@@ -537,9 +597,7 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
         });
 
         // Dark mode toggle
-        const darkModeToggle = document.querySelector(
-          '.setting-item:nth-of-type(2) input[type="checkbox"]'
-        );
+        const darkModeToggle = document.getElementById("dark-mode");
         darkModeToggle.addEventListener("change", function () {
           if (this.checked) {
             document.body.classList.add("dark-mode");
@@ -548,6 +606,133 @@ ul. Przykładowa 10, 00-001 Warszawa</textarea
           }
         });
       });
+
+      // Funkcja zapisująca ustawienia do localStorage
+      function saveSettings() {
+        // Pobierz wszystkie wartości ustawień
+        const settings = {
+          // Ogólne
+          salonName: document.getElementById("salon-name").value,
+          salonEmail: document.getElementById("salon-email").value,
+          salonPhone: document.getElementById("salon-phone").value,
+          salonAddress: document.getElementById("salon-address").value,
+
+          // Rezerwacje
+          maxDailyBookings: document.getElementById("max-daily-bookings").value,
+          confirmationHours:
+            document.getElementById("confirmation-hours").value,
+          minDaysBefore: document.getElementById("min-days-before").value,
+          maxDaysAhead: document.getElementById("max-days-ahead").value,
+          autoConfirm: document.getElementById("auto-confirm").checked,
+          smsNotifications:
+            document.getElementById("sms-notifications").checked,
+
+          // Wygląd
+          selectedColor: document.getElementById("selected-color").value,
+          darkMode: document.getElementById("dark-mode").checked,
+
+          // Kopie zapasowe
+          autoBackup: document.getElementById("auto-backup").checked,
+
+          // Timestamp zapisu
+          lastSaved: new Date().toISOString(),
+        };
+
+        // Zapisz ustawienia do localStorage
+        localStorage.setItem("salonSettings", JSON.stringify(settings));
+
+        console.log("Ustawienia zostały zapisane:", settings);
+      }
+
+      // Funkcja wczytująca ustawienia z localStorage
+      function loadSettings() {
+        // Pobierz zapisane ustawienia
+        const savedSettings = localStorage.getItem("salonSettings");
+
+        if (!savedSettings) {
+          console.log("Brak zapisanych ustawień. Używam wartości domyślnych.");
+          return;
+        }
+
+        try {
+          const settings = JSON.parse(savedSettings);
+          console.log("Wczytano zapisane ustawienia:", settings);
+
+          // Ustawienia ogólne
+          if (settings.salonName)
+            document.getElementById("salon-name").value = settings.salonName;
+          if (settings.salonEmail)
+            document.getElementById("salon-email").value = settings.salonEmail;
+          if (settings.salonPhone)
+            document.getElementById("salon-phone").value = settings.salonPhone;
+          if (settings.salonAddress)
+            document.getElementById("salon-address").value =
+              settings.salonAddress;
+
+          // Rezerwacje
+          if (settings.maxDailyBookings)
+            document.getElementById("max-daily-bookings").value =
+              settings.maxDailyBookings;
+          if (settings.confirmationHours)
+            document.getElementById("confirmation-hours").value =
+              settings.confirmationHours;
+          if (settings.minDaysBefore)
+            document.getElementById("min-days-before").value =
+              settings.minDaysBefore;
+          if (settings.maxDaysAhead)
+            document.getElementById("max-days-ahead").value =
+              settings.maxDaysAhead;
+
+          document.getElementById("auto-confirm").checked =
+            settings.autoConfirm !== undefined ? settings.autoConfirm : true;
+          document.getElementById("sms-notifications").checked =
+            settings.smsNotifications !== undefined
+              ? settings.smsNotifications
+              : true;
+
+          // Wygląd
+          if (settings.selectedColor) {
+            document.getElementById("selected-color").value =
+              settings.selectedColor;
+            // Ustaw aktywny kolor
+            document.querySelectorAll(".color-option").forEach((option) => {
+              option.classList.remove("active");
+              if (option.dataset.color === settings.selectedColor) {
+                option.classList.add("active");
+              }
+            });
+
+            // Zastosuj kolor
+            document.documentElement.style.setProperty(
+              "--primary",
+              settings.selectedColor
+            );
+          }
+
+          document.getElementById("dark-mode").checked =
+            settings.darkMode || false;
+          if (settings.darkMode) {
+            document.body.classList.add("dark-mode");
+          }
+
+          // Kopie zapasowe
+          document.getElementById("auto-backup").checked =
+            settings.autoBackup !== undefined ? settings.autoBackup : true;
+        } catch (error) {
+          console.error("Błąd podczas wczytywania ustawień:", error);
+        }
+      }
+
+      // Funkcja wyświetlająca powiadomienie o zapisie
+      function showSaveNotification() {
+        const notification = document.getElementById("save-notification");
+        notification.classList.add("show");
+
+        // Ukryj powiadomienie po 3 sekundach
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 3000);
+      }
     </script>
   </body>
 </html>

@@ -1,409 +1,363 @@
 <!DOCTYPE html>
 <html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Baraballa - Salon Kosmetyczny</title>
-    <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <header>
-      <div class="logo-container">
-        <div class="logo">Salon Kosmetyczny BARABALLA</div>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#home">Strona główna</a></li>
-          <li><a href="#services">Usługi</a></li>
-          <li><a href="#stats">Statystyki</a></li>
-          <li><a href="#gallery">Galeria</a></li>
-          <li><a href="#testimonials">Opinie</a></li>
-          <li><a href="#contact">Kontakt</a></li>
-        </ul>
-      </nav>
-    </header>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Baraballa - Salon Kosmetyczny</title>
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<script src="script.js" defer></script>
+	</head>
+	<body>
+		<header>
+			<div class="logo-container">
+				<div class="logo">Salon Kosmetyczny BARABALLA</div>
+			</div>
+			<div class="mobile-menu-toggle" id="mobile-menu-toggle">
+				<i class="fas fa-bars"></i>
+			</div>
+			<nav id="main-nav">
+				<ul>
+					<li><a href="#home">Strona główna</a></li>
+					<li><a href="#services">Usługi</a></li>
+					<li><a href="#stats">Statystyki</a></li>
+					<li><a href="#gallery">Galeria</a></li>
+					<li><a href="#testimonials">Opinie</a></li>
+					<li><a href="#contact">Kontakt</a></li>
+				</ul>
+			</nav>
+		</header>
 
-    <!-- Banner with B1_0.jpg -->
-    <div id="home" class="banner">
-      <img src="B1_0.jpg" alt="Piękne Paznokcie - Salon Baraballa" />
-      <div class="banner-overlay">
-        <div class="banner-title">Twoje Dłonie Zasługują na Najlepsze</div>
-        <div class="banner-subtitle">
-          Pozwól sobie na chwilę luksusu w naszym salonie, gdzie łączymy artyzm
-          z profesjonalną pielęgnacją dla Twoich wyjątkowych paznokci.
-        </div>
-        <a href="#contact" class="banner-btn">Umów wizytę</a>
-      </div>
-    </div>
+		<!-- Menu backdrop -->
+		<div class="menu-backdrop" id="menu-backdrop"></div>
 
-    <section id="services" class="services">
-      <h2 class="section-title fade-in">Nasze Usługi</h2>
-      <div class="services-container">
-        <div class="service-card slide-in-left">
-          <div
-            class="service-img"
-            style="background-image: url('B4_0.jpg')"
-          ></div>
-          <div class="service-content">
-            <h3>Klasyczny Manicure</h3>
-            <p>
-              Kompleksowa pielęgnacja dłoni i paznokci, obejmująca precyzyjne
-              kształtowanie, odżywczą kąpiel, delikatną pielęgnację skórek,
-              relaksujący masaż oraz staranną aplikację lakieru w wybranym
-              odcieniu.
-            </p>
-            <div class="price">60 zł</div>
-            <a href="#contact" class="btn">Zarezerwuj</a>
-          </div>
-        </div>
+		<!-- Banner with B1_0.jpg -->
+		<div id="home" class="banner">
+			<img src="B1_0.jpg" alt="Piękne Paznokcie - Salon Baraballa" />
+			<div class="banner-overlay">
+				<div class="banner-title">Twoje Dłonie Zasługują na Najlepsze</div>
+				<div class="banner-subtitle">
+					Pozwól sobie na chwilę luksusu w naszym salonie, gdzie łączymy artyzm z profesjonalną pielęgnacją dla Twoich
+					wyjątkowych paznokci.
+				</div>
+				<a href="#contact" class="banner-btn">Umów wizytę</a>
+			</div>
+		</div>
 
-        <div class="service-card fade-in">
-          <div
-            class="service-img"
-            style="background-image: url('B2_0.jpg')"
-          ></div>
-          <div class="service-content">
-            <h3>Manicure Hybrydowy</h3>
-            <p>
-              Trwałość i perfekcyjny wygląd na dłużej - nasz manicure hybrydowy
-              to precyzyjne przygotowanie płytki, specjalistyczna aplikacja
-              lakieru światłoutwardzalnego oraz intensywna pielęgnacja skórek
-              dla efektu, który zachwyca przez tygodnie.
-            </p>
-            <div class="price">110 zł</div>
-            <a href="#contact" class="btn">Zarezerwuj</a>
-          </div>
-        </div>
+		<section id="services" class="services">
+			<h2 class="section-title fade-in">Nasze Usługi</h2>
+			<div class="services-container">
+				<div class="service-card slide-in-left">
+					<div class="service-img" style="background-image: url('B4_0.jpg')"></div>
+					<div class="service-content">
+						<h3>Klasyczny Manicure</h3>
+						<p>
+							Kompleksowa pielęgnacja dłoni i paznokci, obejmująca precyzyjne kształtowanie, odżywczą kąpiel, delikatną
+							pielęgnację skórek, relaksujący masaż oraz staranną aplikację lakieru w wybranym odcieniu.
+						</p>
+						<div class="price">60 zł</div>
+						<a href="#contact" class="btn">Zarezerwuj</a>
+					</div>
+				</div>
 
-        <div class="service-card slide-in-right">
-          <div
-            class="service-img"
-            style="background-image: url('B3_0.jpg')"
-          ></div>
-          <div class="service-content">
-            <h3>Luksusowy Pedicure</h3>
-            <p>
-              Wyjątkowa ceremonia dla zmęczonych stóp - aromatyczna kąpiel,
-              dokładne złuszczanie naskórka, profesjonalna pielęgnacja paznokci,
-              głęboko odżywczy masaż oraz wykończenie perfekcyjnym kolorem.
-              Poczuj wyjątkowy komfort przy każdym kroku.
-            </p>
-            <div class="price">130 zł</div>
-            <a href="#contact" class="btn">Zarezerwuj</a>
-          </div>
-        </div>
-      </div>
-    </section>
+				<div class="service-card fade-in">
+					<div class="service-img" style="background-image: url('B2_0.jpg')"></div>
+					<div class="service-content">
+						<h3>Manicure Hybrydowy</h3>
+						<p>
+							Trwałość i perfekcyjny wygląd na dłużej - nasz manicure hybrydowy to precyzyjne przygotowanie płytki,
+							specjalistyczna aplikacja lakieru światłoutwardzalnego oraz intensywna pielęgnacja skórek dla efektu,
+							który zachwyca przez tygodnie.
+						</p>
+						<div class="price">110 zł</div>
+						<a href="#contact" class="btn">Zarezerwuj</a>
+					</div>
+				</div>
 
-    <section id="stats" class="stats-section">
-      <h2 class="section-title fade-in">Nasze Osiągnięcia</h2>
-      <div class="stats-container">
-        <div class="stat-item zoom-in">
-          <div class="stat-number counter" data-target="1500">0</div>
-          <div class="stat-label">Zadowolonych Klientek</div>
-        </div>
-        <div class="stat-item zoom-in">
-          <div class="stat-number counter" data-target="6">0</div>
-          <div class="stat-label">Lat Doświadczenia</div>
-        </div>
-        <div class="stat-item zoom-in">
-          <div class="stat-number counter" data-target="25">0</div>
-          <div class="stat-label">Rodzajów Stylizacji</div>
-        </div>
-        <div class="stat-item zoom-in">
-          <div class="stat-number counter" data-target="98">0</div>
-          <div class="stat-label">% Pozytywnych Opinii</div>
-        </div>
-      </div>
-    </section>
+				<div class="service-card slide-in-right">
+					<div class="service-img" style="background-image: url('B3_0.jpg')"></div>
+					<div class="service-content">
+						<h3>Luksusowy Pedicure</h3>
+						<p>
+							Wyjątkowa ceremonia dla zmęczonych stóp - aromatyczna kąpiel, dokładne złuszczanie naskórka, profesjonalna
+							pielęgnacja paznokci, głęboko odżywczy masaż oraz wykończenie perfekcyjnym kolorem. Poczuj wyjątkowy
+							komfort przy każdym kroku.
+						</p>
+						<div class="price">130 zł</div>
+						<a href="#contact" class="btn">Zarezerwuj</a>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <section id="gallery" class="gallery">
-      <h2 class="section-title fade-in">Nasze Prace</h2>
-      <div class="gallery-container">
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C1_0.jpg')"
-        ></div>
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C2_0.jpg')"
-        ></div>
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C3_0.jpg')"
-        ></div>
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C4_0.jpg')"
-        ></div>
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C5_0.jpg')"
-        ></div>
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C6_0.jpg')"
-        ></div>
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C7_0.jpg')"
-        ></div>
-        <div
-          class="gallery-item zoom-in"
-          style="background-image: url('C8_0.jpg')"
-        ></div>
-      </div>
-    </section>
+		<section id="stats" class="stats-section">
+			<h2 class="section-title fade-in">Nasze Osiągnięcia</h2>
+			<div class="stats-container">
+				<div class="stat-item zoom-in">
+					<div class="stat-number counter" data-target="1500">0</div>
+					<div class="stat-label">Zadowolonych Klientek</div>
+				</div>
+				<div class="stat-item zoom-in">
+					<div class="stat-number counter" data-target="6">0</div>
+					<div class="stat-label">Lat Doświadczenia</div>
+				</div>
+				<div class="stat-item zoom-in">
+					<div class="stat-number counter" data-target="25">0</div>
+					<div class="stat-label">Rodzajów Stylizacji</div>
+				</div>
+				<div class="stat-item zoom-in">
+					<div class="stat-number counter" data-target="98">0</div>
+					<div class="stat-label">% Pozytywnych Opinii</div>
+				</div>
+			</div>
+		</section>
 
-    <section id="instagram-feed" class="instagram-section">
-      <h2 class="section-title fade-in">Śledź nas na Instagramie</h2>
-      <p class="instagram-subtitle fade-in">
-        Sprawdź nasze najnowsze realizacje i inspiracje na @_barbarella12
-      </p>
-      <div class="instagram-container fade-in">
-        <!-- Profil Instagrama z aktualizacją lokalizacji -->
-        <div class="instagram-profile">
-          <div class="instagram-profile-header">
-            <div class="instagram-avatar">
-              <img src="logo.png" alt="Baraballa avatar" />
-            </div>
-            <div class="instagram-profile-info">
-              <h3>_barbarella12</h3>
-              <div class="instagram-stats">
-                <span><strong>433</strong> postów</span>
-                <span><strong>200</strong> obserwujących</span>
-                <span><strong>433</strong> obserwuje</span>
-              </div>
-              <p>
-                Salon Kosmetyczny BARABALLA ✨ • Profesjonalne stylizacje •
-                Manicure hybrydowy • Pedicure • Tarnów, ul. Widok 63
-              </p>
-            </div>
-          </div>
-        </div>
+		<section id="gallery" class="gallery">
+			<h2 class="section-title fade-in">Nasze Prace</h2>
+			<div class="gallery-container">
+				<div class="gallery-item zoom-in" style="background-image: url('C1_0.jpg')"></div>
+				<div class="gallery-item zoom-in" style="background-image: url('C2_0.jpg')"></div>
+				<div class="gallery-item zoom-in" style="background-image: url('C3_0.jpg')"></div>
+				<div class="gallery-item zoom-in" style="background-image: url('C4_0.jpg')"></div>
+				<div class="gallery-item zoom-in" style="background-image: url('C5_0.jpg')"></div>
+				<div class="gallery-item zoom-in" style="background-image: url('C6_0.jpg')"></div>
+				<div class="gallery-item zoom-in" style="background-image: url('C7_0.jpg')"></div>
+				<div class="gallery-item zoom-in" style="background-image: url('C8_0.jpg')"></div>
+			</div>
+		</section>
 
-        <div class="instagram-api-info">
-          <p>
-            <strong>Status API Instagrama:</strong>
-            <span id="instagram-status"
-              >Synchronizacja z kontem Instagram...</span
-            >
-          </p>
-          <button
-            id="load-instagram"
-            class="instagram-load-btn"
-            style="display: none"
-          >
-            Odśwież zdjęcia
-          </button>
-          <div
-            id="loading-spinner"
-            class="loading-spinner"
-            style="display: none"
-          >
-            <div class="spinner"></div>
-            <p>Pobieranie najnowszych postów z Instagrama...</p>
-          </div>
-        </div>
+		<section id="instagram-feed" class="instagram-section">
+			<h2 class="section-title fade-in">Śledź nas na Instagramie</h2>
+			<p class="instagram-subtitle fade-in">Sprawdź nasze najnowsze realizacje i inspiracje na @_barbarella12</p>
+			<div class="instagram-container fade-in">
+				<!-- Profil Instagrama z aktualizacją lokalizacji -->
+				<div class="instagram-profile">
+					<div class="instagram-profile-header">
+						<div class="instagram-avatar">
+							<img src="logo.png" alt="Baraballa avatar" />
+						</div>
+						<div class="instagram-profile-info">
+							<h3>_barbarella12</h3>
+							<div class="instagram-stats">
+								<span><strong>433</strong> postów</span>
+								<span><strong>200</strong> obserwujących</span>
+								<span><strong>433</strong> obserwuje</span>
+							</div>
+							<p>
+								Salon Kosmetyczny BARABALLA ✨ • Profesjonalne stylizacje • Manicure hybrydowy • Pedicure • Tarnów, ul.
+								Widok 63
+							</p>
+						</div>
+					</div>
+				</div>
 
-        <div id="instagram-grid" class="instagram-grid" style="display: none">
-          <!-- Zdjęcia zostaną wstawione dynamicznie przez JavaScript -->
-        </div>
+				<div class="instagram-api-info">
+					<p>
+						<strong>Status API Instagrama:</strong>
+						<span id="instagram-status">Synchronizacja z kontem Instagram...</span>
+					</p>
+					<button id="load-instagram" class="instagram-load-btn" style="display: none">Odśwież zdjęcia</button>
+					<div id="loading-spinner" class="loading-spinner" style="display: none">
+						<div class="spinner"></div>
+						<p>Pobieranie najnowszych postów z Instagrama...</p>
+					</div>
+				</div>
 
-        <!-- Szablony modali dla postów zostaną wygenerowane dynamicznie -->
-        <div id="instagram-modals-container"></div>
+				<div id="instagram-grid" class="instagram-grid" style="display: none">
+					<!-- Zdjęcia zostaną wstawione dynamicznie przez JavaScript -->
+				</div>
 
-        <a
-          href="https://www.instagram.com/_barbarella12/"
-          target="_blank"
-          class="instagram-follow-btn"
-        >
-          <span class="instagram-icon">📸</span> Obserwuj nas na Instagramie
-        </a>
-      </div>
-    </section>
+				<!-- Szablony modali dla postów zostaną wygenerowane dynamicznie -->
+				<div id="instagram-modals-container"></div>
 
-    <section id="testimonials" class="testimonials">
-      <h2 class="section-title fade-in">Opinie Klientek</h2>
-      <div class="testimonial-container">
-        <div class="testimonial-card slide-in-left">
-          <p class="testimonial-text">
-            "Jestem zachwycona poziomem obsługi w Baraballa. Moje paznokcie
-            nigdy wcześniej nie wyglądały tak pięknie! Profesjonalne podejście i
-            przyjazna atmosfera sprawiają, że każda wizyta to czysta
-            przyjemność."
-          </p>
-          <p class="testimonial-author">- Anna K., stała klientka</p>
-        </div>
+				<a href="https://www.instagram.com/_barbarella12/" target="_blank" class="instagram-follow-btn">
+					<span class="instagram-icon">📸</span> Obserwuj nas na Instagramie
+				</a>
+			</div>
+		</section>
 
-        <div class="testimonial-card fade-in">
-          <p class="testimonial-text">
-            "Po latach poszukiwań w końcu znalazłam swoje miejsce! Stylizacje
-            utrzymują się idealnie przez 3 tygodnie, a dłonie wyglądają zadbane
-            i eleganckie. Polecam wszystkim kobietom, które cenią sobie
-            najwyższą jakość usług."
-          </p>
-          <p class="testimonial-author">- Maria S., klientka od 2023</p>
-        </div>
+		<section id="testimonials" class="testimonials">
+			<h2 class="section-title fade-in">Opinie Klientek</h2>
+			<div class="testimonial-container">
+				<div class="testimonial-card slide-in-left">
+					<p class="testimonial-text">
+						"Jestem zachwycona poziomem obsługi w Baraballa. Moje paznokcie nigdy wcześniej nie wyglądały tak pięknie!
+						Profesjonalne podejście i przyjazna atmosfera sprawiają, że każda wizyta to czysta przyjemność."
+					</p>
+					<p class="testimonial-author">- Anna K., stała klientka</p>
+				</div>
 
-        <div class="testimonial-card slide-in-right">
-          <p class="testimonial-text">
-            "Pedicure w Baraballa to więcej niż usługa - to prawdziwy rytuał
-            pielęgnacyjny! Moje stopy są gładkie, wypielęgnowane i zawsze
-            perfekcyjnie pomalowane. To mój mały luksus, na który czekam co
-            miesiąc!"
-          </p>
-          <p class="testimonial-author">- Zofia R., bizneswoman</p>
-        </div>
-      </div>
-    </section>
+				<div class="testimonial-card fade-in">
+					<p class="testimonial-text">
+						"Po latach poszukiwań w końcu znalazłam swoje miejsce! Stylizacje utrzymują się idealnie przez 3 tygodnie, a
+						dłonie wyglądają zadbane i eleganckie. Polecam wszystkim kobietom, które cenią sobie najwyższą jakość
+						usług."
+					</p>
+					<p class="testimonial-author">- Maria S., klientka od 2023</p>
+				</div>
 
-    <section id="contact" class="contact">
-      <div class="contact-container">
-        <div class="contact-info fade-in">
-          <h2 class="fade-in">Skontaktuj się z nami</h2>
-          <div class="info-item slide-in-left">
-            <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-            <div class="info-text">
-              <h3>Lokalizacja</h3>
-              <p>
-                <a
-                  href="https://maps.google.com/?q=ul.+Widok+63,+Tarnów"
-                  target="_blank"
-                  >ul. Widok 63, Tarnów 33-100</a
-                >
-              </p>
-            </div>
-          </div>
+				<div class="testimonial-card slide-in-right">
+					<p class="testimonial-text">
+						"Pedicure w Baraballa to więcej niż usługa - to prawdziwy rytuał pielęgnacyjny! Moje stopy są gładkie,
+						wypielęgnowane i zawsze perfekcyjnie pomalowane. To mój mały luksus, na który czekam co miesiąc!"
+					</p>
+					<p class="testimonial-author">- Zofia R., bizneswoman</p>
+				</div>
+			</div>
+		</section>
 
-          <div class="info-item slide-in-left">
-            <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
-            <div class="info-text">
-              <h3>Telefon</h3>
-              <p><a href="tel:+48798357402">+48 798 357 402</a></p>
-            </div>
-          </div>
+		<section id="contact" class="contact">
+			<div class="contact-container">
+				<div class="contact-info fade-in">
+					<h2 class="fade-in">Skontaktuj się z nami</h2>
+					<div class="info-item slide-in-left">
+						<div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+						<div class="info-text">
+							<h3>Lokalizacja</h3>
+							<p>
+								<a href="https://maps.google.com/?q=ul.+Widok+63,+Tarnów" target="_blank"
+									>ul. Widok 63, Tarnów 33-100</a
+								>
+							</p>
+						</div>
+					</div>
 
-          <div class="info-item slide-in-left">
-            <div class="info-icon"><i class="fas fa-envelope"></i></div>
-            <div class="info-text">
-              <h3>Email</h3>
-              <p>
-                <a href="mailto:barbarella.tarnow@gmail.com"
-                  >barbarella.tarnow@gmail.com</a
-                >
-              </p>
-            </div>
-          </div>
+					<div class="info-item slide-in-left">
+						<div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+						<div class="info-text">
+							<h3>Telefon</h3>
+							<p><a href="tel:+48798357402">+48 798 357 402</a></p>
+						</div>
+					</div>
 
-          <div class="info-item slide-in-left">
-            <div class="info-icon"><i class="fas fa-clock"></i></div>
-            <div class="info-text">
-              <h3>Godziny otwarcia</h3>
-              <p>
-                Pon-Pt: 9:00 - 19:00<br />Sob: 10:00 - 18:00<br />Ndz: Zamknięte
-              </p>
-            </div>
-          </div>
-        </div>
+					<div class="info-item slide-in-left">
+						<div class="info-icon"><i class="fas fa-envelope"></i></div>
+						<div class="info-text">
+							<h3>Email</h3>
+							<p>
+								<a href="mailto:barbarella.tarnow@gmail.com">barbarella.tarnow@gmail.com</a>
+							</p>
+						</div>
+					</div>
 
-        <div class="contact-form fade-in">
-          <h2 class="fade-in">Umów swoją wizytę</h2>
-          <form>
-            <div class="form-group slide-in-right">
-              <label for="name">Twoje imię</label>
-              <input type="text" id="name" class="form-control" required />
-            </div>
+					<div class="info-item slide-in-left">
+						<div class="info-icon"><i class="fas fa-clock"></i></div>
+						<div class="info-text">
+							<h3>Godziny otwarcia</h3>
+							<p>Pon-Pt: 9:00 - 19:00<br />Sob: 10:00 - 18:00<br />Ndz: Zamknięte</p>
+						</div>
+					</div>
+				</div>
 
-            <div class="form-group slide-in-right">
-              <label for="email">Adres e-mail</label>
-              <input type="email" id="email" class="form-control" required />
-            </div>
+				<div class="contact-form fade-in">
+					<h2 class="fade-in">Umów swoją wizytę</h2>
+					<form id="booking-form">
+						<div class="form-group slide-in-right">
+							<label for="name">Twoje imię</label>
+							<input type="text" id="name" class="form-control" required />
+						</div>
 
-            <div class="form-group slide-in-right">
-              <label for="phone">Numer telefonu</label>
-              <input type="tel" id="phone" class="form-control" required />
-            </div>
+						<div class="form-group slide-in-right">
+							<label for="email">Adres e-mail</label>
+							<input type="email" id="email" class="form-control" required />
+						</div>
 
-            <div class="form-group slide-in-right">
-              <label for="service">Wybierz usługę</label>
-              <select id="service" class="form-control" required>
-                <option value="">Wybierz usługę</option>
-                <option value="classic-manicure">Klasyczny Manicure</option>
-                <option value="gel-manicure">Manicure Hybrydowy</option>
-                <option value="luxury-pedicure">Luksusowy Pedicure</option>
-                <option value="nail-art">Zdobienie paznokci</option>
-                <option value="nail-extensions">Przedłużanie paznokci</option>
-              </select>
-            </div>
+						<div class="form-group slide-in-right">
+							<label for="phone">Numer telefonu</label>
+							<input type="tel" id="phone" class="form-control" required />
+						</div>
 
-            <div class="form-group slide-in-right">
-              <label for="date">Preferowana data</label>
-              <input type="date" id="date" class="form-control" required />
-            </div>
+						<div class="form-group slide-in-right">
+							<label for="service">Wybierz usługę</label>
+							<select id="service" class="form-control" required>
+								<option value="">Wybierz usługę</option>
+								<option value="classic-manicure">Klasyczny Manicure</option>
+								<option value="gel-manicure">Manicure Hybrydowy</option>
+								<option value="luxury-pedicure">Luksusowy Pedicure</option>
+								<option value="nail-art">Zdobienie paznokci</option>
+								<option value="nail-extensions">Przedłużanie paznokci</option>
+							</select>
+						</div>
 
-            <div class="form-group slide-in-right">
-              <label for="time">Preferowana godzina</label>
-              <input type="time" id="time" class="form-control" required />
-            </div>
+						<div class="form-group slide-in-right">
+							<label for="date">Preferowana data</label>
+							<input type="date" id="date" class="form-control" required />
+						</div>
 
-            <div class="form-group slide-in-right">
-              <label for="message">Dodatkowe uwagi</label>
-              <textarea id="message" class="form-control"></textarea>
-            </div>
+						<div class="form-group slide-in-right">
+							<label for="time">Preferowana godzina</label>
+							<input type="time" id="time" class="form-control" required />
+						</div>
 
-            <button type="submit" class="btn zoom-in">Zarezerwuj termin</button>
-          </form>
-        </div>
-      </div>
-    </section>
+						<div class="form-group slide-in-right">
+							<label for="message">Dodatkowe uwagi</label>
+							<textarea id="message" class="form-control"></textarea>
+						</div>
 
-    <footer>
-      <div class="footer-content">
-        <div>
-          <div class="footer-logo">BARABALLA</div>
-          <p>Twoja oaza piękna i relaksu dla perfekcyjnych paznokci.</p>
-        </div>
+						<button type="submit" class="btn zoom-in">Zarezerwuj termin</button>
 
-        <div class="footer-links">
-          <ul>
-            <li><a href="#home">Strona główna</a></li>
-            <li><a href="#services">Usługi</a></li>
-            <li><a href="#stats">Statystyki</a></li>
-            <li><a href="#gallery">Galeria</a></li>
-            <li><a href="#testimonials">Opinie</a></li>
-            <li><a href="#contact">Kontakt</a></li>
-          </ul>
-        </div>
+						<!-- Komunikat o rezerwacji -->
+						<div
+							id="booking-confirmation"
+							style="
+								display: none;
+								margin-top: 20px;
+								padding: 15px;
+								background-color: #d4edda;
+								color: #155724;
+								border-radius: 5px;
+								text-align: center;
+							"
+						>
+							<p style="margin: 0; font-weight: 500">
+								Twoja rezerwacja została przyjęta! Wkrótce skontaktujemy się z Tobą, aby potwierdzić termin.
+							</p>
+							<p style="margin-top: 10px; font-size: 14px">
+								Rezerwacja została dodana do kalendarza.
+								<a href="admin/login.html" style="color: #155724; text-decoration: underline">
+									Przejdź do panelu administracyjnego
+								</a>
+								aby zobaczyć szczegóły (login: admin, hasło: admin123).
+							</p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
 
-        <div>
-          <div class="social-icons">
-            <a
-              href="https://www.facebook.com/profile.php?id=100049647437176"
-              target="_blank"
-              class="social-icon"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a
-              href="https://www.instagram.com/_barbarella12/"
-              target="_blank"
-              class="social-icon"
-              ><i class="fab fa-instagram"></i
-            ></a>
-          </div>
-        </div>
-      </div>
+		<footer>
+			<div class="footer-content">
+				<div>
+					<div class="footer-logo">BARABALLA</div>
+					<p>Twoja oaza piękna i relaksu dla perfekcyjnych paznokci.</p>
+				</div>
 
-      <div class="copyright">
-        <p>
-          &copy; 2025 Baraballa Salon Kosmetyczny. Wszelkie prawa zastrzeżone.
-        </p>
-      </div>
-    </footer>
-  </body>
+				<div class="footer-links">
+					<ul>
+						<li><a href="#home">Strona główna</a></li>
+						<li><a href="#services">Usługi</a></li>
+						<li><a href="#stats">Statystyki</a></li>
+						<li><a href="#gallery">Galeria</a></li>
+						<li><a href="#testimonials">Opinie</a></li>
+						<li><a href="#contact">Kontakt</a></li>
+					</ul>
+				</div>
+
+				<div>
+					<div class="social-icons">
+						<a href="https://www.facebook.com/profile.php?id=100049647437176" target="_blank" class="social-icon"
+							><i class="fab fa-facebook-f"></i
+						></a>
+						<a href="https://www.instagram.com/_barbarella12/" target="_blank" class="social-icon"
+							><i class="fab fa-instagram"></i
+						></a>
+					</div>
+				</div>
+			</div>
+
+			<div class="copyright">
+				<p>&copy; 2025 Baraballa Salon Kosmetyczny. Wszelkie prawa zastrzeżone.</p>
+			</div>
+		</footer>
+	</body>
 </html>

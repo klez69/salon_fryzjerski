@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Panel Administracyjny - Klienci</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+		<link rel="stylesheet" href="admin-style.css" />
+		<style>
+			.search-bar {
+				display: flex;
+				margin-bottom: 20px;
+			}
+
+			.search-bar input {
+				flex: 1;
+				padding: 10px 15px;
+				border: 1px solid #e0e0e0;
+				border-radius: 5px 0 0 5px;
+				font-size: 14px;
+			}
+
+			.search-bar button {
+				background-color: var(--primary);
+				color: white;
+				border: none;
+				padding: 10px 15px;
+				border-radius: 0 5px 5px 0;
+				cursor: pointer;
+			}
+
+			.client-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-bottom: 30px;
+			}
+
+			.client-table th {
+				background-color: #f8f9fa;
+				padding: 12px 15px;
+				text-align: left;
+				font-weight: 600;
+				color: var(--dark);
+				border-bottom: 2px solid #e0e0e0;
+			}
+
+			.client-table td {
+				padding: 12px 15px;
+				border-bottom: 1px solid #e0e0e0;
+			}
+
+			.client-table tr:hover {
+				background-color: #f5f8ff;
+			}
+
+			.action-btns {
+				display: flex;
+				gap: 10px;
+			}
+
+			.action-btn {
+				background: none;
+				border: none;
+				font-size: 16px;
+				cursor: pointer;
+				transition: color 0.2s;
+			}
+
+			.view-btn {
+				color: var(--info);
+			}
+
+			.edit-btn {
+				color: var(--primary);
+			}
+
+			.delete-btn {
+				color: var(--danger);
+			}
+
+			.action-btn:hover {
+				opacity: 0.8;
+			}
+
+			.pagination {
+				display: flex;
+				justify-content: center;
+				margin-top: 20px;
+				gap: 10px;
+			}
+
+			.pagination-btn {
+				padding: 8px 15px;
+				border: 1px solid #e0e0e0;
+				background-color: white;
+				color: var(--dark);
+				border-radius: 5px;
+				cursor: pointer;
+				transition: all 0.2s;
+			}
+
+			.pagination-btn.active {
+				background-color: var(--primary);
+				color: white;
+				border-color: var(--primary);
+			}
+
+			.pagination-btn:hover:not(.active) {
+				background-color: #f5f5f5;
+			}
+
+			.tag {
+				padding: 4px 8px;
+				border-radius: 4px;
+				font-size: 12px;
+				font-weight: 500;
+			}
+
+			.tag-regular {
+				background-color: #e3f2fd;
+				color: #1976d2;
+			}
+
+			.tag-vip {
+				background-color: #fff8e1;
+				color: #ff8f00;
+			}
+
+			.tag-new {
+				background-color: #e8f5e9;
+				color: #388e3c;
+			}
+
+			.modal-form .form-row {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 15px;
+			}
+
+			@media (max-width: 768px) {
+				.modal-form .form-row {
+					grid-template-columns: 1fr;
+				}
+
+				.client-table {
+					font-size: 14px;
+				}
+
+				.client-table th:nth-child(3),
+				.client-table td:nth-child(3) {
+					display: none;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<div class="logo">
+					<i class="fas fa-spa"></i>
+					<span>BeautyAdmin</span>
+				</div>
+				<div class="sidebar-nav">
+					<ul>
+						<li>
+							<a href="dashboard.html">
+								<i class="fas fa-tachometer-alt"></i>
+								<span>Dashboard</span>
+							</a>
+						</li>
+						<li>
+							<a href="calendar.html">
+								<i class="fas fa-calendar-alt"></i>
+								<span>Kalendarz</span>
+							</a>
+						</li>
+						<li class="active">
+							<a href="clients.html">
+								<i class="fas fa-users"></i>
+								<span>Klienci</span>
+							</a>
+						</li>
+						<li>
+							<a href="services.html">
+								<i class="fas fa-list-alt"></i>
+								<span>Usługi</span>
+							</a>
+						</li>
+						<li>
+							<a href="statistics.html">
+								<i class="fas fa-chart-bar"></i>
+								<span>Statystyki</span>
+							</a>
+						</li>
+						<li>
+							<a href="settings.html">
+								<i class="fas fa-cog"></i>
+								<span>Ustawienia</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="sidebar-footer">
+					<a href="../nail-salon-template.html">
+						<i class="fas fa-sign-out-alt"></i>
+						<span>Powrót do strony</span>
+					</a>
+				</div>
+			</div>
+
+			<!-- Main Content -->
+			<div class="main-content">
+				<div class="main-header">
+					<div class="header-search">
+						<i class="fas fa-search"></i>
+						<input type="text" placeholder="Szukaj..." />
+					</div>
+					<div class="header-user">
+						<div class="notifications">
+							<i class="fas fa-bell"></i>
+							<span class="notification-badge">3</span>
+						</div>
+						<div class="user-info">
+							<span>Admin</span>
+							<img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Admin" />
+						</div>
+					</div>
+				</div>
+
+				<div class="dashboard-content">
+					<h1>Klienci</h1>
+
+					<div class="dashboard-card full-width">
+						<div class="card-header">
+							<h3>Lista klientów</h3>
+							<div class="card-actions">
+								<button class="btn btn-primary" id="add-client"><i class="fas fa-plus"></i> Dodaj klienta</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="search-bar">
+								<input type="text" placeholder="Szukaj klienta..." id="client-search" />
+								<button type="button"><i class="fas fa-search"></i></button>
+							</div>
+
+							<table class="client-table">
+								<thead>
+									<tr>
+										<th>Imię i nazwisko</th>
+										<th>Telefon</th>
+										<th>Email</th>
+										<th>Ostatnia wizyta</th>
+										<th>Status</th>
+										<th>Akcje</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Anna Kowalska</td>
+										<td>+48 601 234 567</td>
+										<td>anna.kowalska@example.com</td>
+										<td>20.06.2023</td>
+										<td><span class="tag tag-regular">Stały klient</span></td>
+										<td>
+											<div class="action-btns">
+												<button class="action-btn view-btn" title="Zobacz profil">
+													<i class="fas fa-eye"></i>
+												</button>
+												<button class="action-btn edit-btn" title="Edytuj">
+													<i class="fas fa-edit"></i>
+												</button>
+												<button class="action-btn delete-btn" title="Usuń">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Monika Nowak</td>
+										<td>+48 602 345 678</td>
+										<td>monika.nowak@example.com</td>
+										<td>15.06.2023</td>
+										<td><span class="tag tag-vip">VIP</span></td>
+										<td>
+											<div class="action-btns">
+												<button class="action-btn view-btn" title="Zobacz profil">
+													<i class="fas fa-eye"></i>
+												</button>
+												<button class="action-btn edit-btn" title="Edytuj">
+													<i class="fas fa-edit"></i>
+												</button>
+												<button class="action-btn delete-btn" title="Usuń">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Katarzyna Wiśniewska</td>
+										<td>+48 603 456 789</td>
+										<td>katarzyna.wisniewska@example.com</td>
+										<td>10.06.2023</td>
+										<td><span class="tag tag-regular">Stały klient</span></td>
+										<td>
+											<div class="action-btns">
+												<button class="action-btn view-btn" title="Zobacz profil">
+													<i class="fas fa-eye"></i>
+												</button>
+												<button class="action-btn edit-btn" title="Edytuj">
+													<i class="fas fa-edit"></i>
+												</button>
+												<button class="action-btn delete-btn" title="Usuń">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Joanna Lis</td>
+										<td>+48 604 567 890</td>
+										<td>joanna.lis@example.com</td>
+										<td>05.06.2023</td>
+										<td><span class="tag tag-regular">Stały klient</span></td>
+										<td>
+											<div class="action-btns">
+												<button class="action-btn view-btn" title="Zobacz profil">
+													<i class="fas fa-eye"></i>
+												</button>
+												<button class="action-btn edit-btn" title="Edytuj">
+													<i class="fas fa-edit"></i>
+												</button>
+												<button class="action-btn delete-btn" title="Usuń">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Barbara Pawlak</td>
+										<td>+48 605 678 901</td>
+										<td>barbara.pawlak@example.com</td>
+										<td>01.06.2023</td>
+										<td><span class="tag tag-vip">VIP</span></td>
+										<td>
+											<div class="action-btns">
+												<button class="action-btn view-btn" title="Zobacz profil">
+													<i class="fas fa-eye"></i>
+												</button>
+												<button class="action-btn edit-btn" title="Edytuj">
+													<i class="fas fa-edit"></i>
+												</button>
+												<button class="action-btn delete-btn" title="Usuń">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>Magdalena Dąbrowska</td>
+										<td>+48 606 789 012</td>
+										<td>magdalena.dabrowska@example.com</td>
+										<td>28.05.2023</td>
+										<td><span class="tag tag-new">Nowy klient</span></td>
+										<td>
+											<div class="action-btns">
+												<button class="action-btn view-btn" title="Zobacz profil">
+													<i class="fas fa-eye"></i>
+												</button>
+												<button class="action-btn edit-btn" title="Edytuj">
+													<i class="fas fa-edit"></i>
+												</button>
+												<button class="action-btn delete-btn" title="Usuń">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<div class="pagination">
+								<button class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+								<button class="pagination-btn active">1</button>
+								<button class="pagination-btn">2</button>
+								<button class="pagination-btn">3</button>
+								<button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal dodawania/edycji klienta -->
+		<div id="client-modal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Dodaj nowego klienta</h3>
+					<button class="close-modal" id="close-client-modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form id="client-form" class="modal-form">
+						<div class="form-group">
+							<label for="client-fullname">Imię i nazwisko</label>
+							<input type="text" id="client-fullname" required />
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="client-phone">Telefon</label>
+								<input type="tel" id="client-phone" required />
+							</div>
+							<div class="form-group">
+								<label for="client-email">Email</label>
+								<input type="email" id="client-email" />
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="client-birthdate">Data urodzenia</label>
+								<input type="date" id="client-birthdate" />
+							</div>
+							<div class="form-group">
+								<label for="client-status">Status</label>
+								<select id="client-status">
+									<option value="new">Nowy klient</option>
+									<option value="regular">Stały klient</option>
+									<option value="vip">VIP</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="client-address">Adres</label>
+							<input type="text" id="client-address" />
+						</div>
+						<div class="form-group">
+							<label for="client-notes">Uwagi</label>
+							<textarea id="client-notes" rows="3"></textarea>
+						</div>
+						<div class="form-actions">
+							<button type="button" class="btn btn-secondary" id="cancel-client">Anuluj</button>
+							<button type="submit" class="btn btn-primary">Zapisz</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal podglądu klienta -->
+		<div id="view-client-modal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Profil klienta</h3>
+					<button class="close-modal" id="close-view-modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="client-profile">
+						<div class="client-info">
+							<h3 id="profile-name">Anna Kowalska</h3>
+							<p><i class="fas fa-phone"></i> <span id="profile-phone">+48 601 234 567</span></p>
+							<p><i class="fas fa-envelope"></i> <span id="profile-email">anna.kowalska@example.com</span></p>
+							<p><i class="fas fa-map-marker-alt"></i> <span id="profile-address">ul. Kwiatowa 5, Warszawa</span></p>
+							<p><i class="fas fa-birthday-cake"></i> <span id="profile-birthdate">15.03.1990</span></p>
+							<p>
+								<i class="fas fa-user-tag"></i> <span id="profile-status" class="tag tag-regular">Stały klient</span>
+							</p>
+						</div>
+
+						<div class="client-history">
+							<h4>Historia wizyt</h4>
+							<table class="history-table">
+								<thead>
+									<tr>
+										<th>Data</th>
+										<th>Usługa</th>
+										<th>Koszt</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>20.06.2023</td>
+										<td>Manicure Hybrydowy</td>
+										<td>120 zł</td>
+									</tr>
+									<tr>
+										<td>05.06.2023</td>
+										<td>Pedicure</td>
+										<td>150 zł</td>
+									</tr>
+									<tr>
+										<td>20.05.2023</td>
+										<td>Manicure Hybrydowy</td>
+										<td>120 zł</td>
+									</tr>
+									<tr>
+										<td>05.05.2023</td>
+										<td>Przedłużanie paznokci</td>
+										<td>200 zł</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="form-actions">
+							<button type="button" class="btn btn-secondary" id="close-profile">Zamknij</button>
+							<button type="button" class="btn btn-primary" id="edit-from-profile">Edytuj</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Funkcja do obsługi wyświetlania i ukrywania modali
+			function setupModals() {
+				const clientModal = document.getElementById('client-modal')
+				const viewClientModal = document.getElementById('view-client-modal')
+				const addClientBtn = document.getElementById('add-client')
+				const closeClientModalBtn = document.getElementById('close-client-modal')
+				const cancelClientBtn = document.getElementById('cancel-client')
+				const closeViewModalBtn = document.getElementById('close-view-modal')
+				const closeProfileBtn = document.getElementById('close-profile')
+				const editFromProfileBtn = document.getElementById('edit-from-profile')
+
+				// Przyciski akcji w tabeli
+				const viewBtns = document.querySelectorAll('.view-btn')
+				const editBtns = document.querySelectorAll('.edit-btn')
+				const deleteBtns = document.querySelectorAll('.delete-btn')
+
+				// Otwieranie modala dodawania klienta
+				addClientBtn.addEventListener('click', () => {
+					clientModal.style.display = 'flex'
+					document.querySelector('.modal-header h3').textContent = 'Dodaj nowego klienta'
+					document.getElementById('client-form').reset()
+				})
+
+				// Zamykanie modali
+				closeClientModalBtn.addEventListener('click', () => {
+					clientModal.style.display = 'none'
+				})
+
+				cancelClientBtn.addEventListener('click', () => {
+					clientModal.style.display = 'none'
+				})
+
+				closeViewModalBtn.addEventListener('click', () => {
+					viewClientModal.style.display = 'none'
+				})
+
+				closeProfileBtn.addEventListener('click', () => {
+					viewClientModal.style.display = 'none'
+				})
+
+				// Przejście z widoku profilu do edycji
+				editFromProfileBtn.addEventListener('click', () => {
+					viewClientModal.style.display = 'none'
+					clientModal.style.display = 'flex'
+					document.querySelector('.modal-header h3').textContent = 'Edytuj klienta'
+					// Tutaj można dodać kod do wypełnienia formularza danymi klienta
+				})
+
+				// Obsługa przycisków w tabeli
+				viewBtns.forEach(btn => {
+					btn.addEventListener('click', () => {
+						viewClientModal.style.display = 'flex'
+					})
+				})
+
+				editBtns.forEach(btn => {
+					btn.addEventListener('click', () => {
+						clientModal.style.display = 'flex'
+						document.querySelector('.modal-header h3').textContent = 'Edytuj klienta'
+						// Tutaj można dodać kod do wypełnienia formularza danymi klienta
+					})
+				})
+
+				deleteBtns.forEach(btn => {
+					btn.addEventListener('click', () => {
+						if (confirm('Czy na pewno chcesz usunąć tego klienta?')) {
+							// Tutaj można dodać kod do usuwania klienta
+							alert('Klient został usunięty')
+						}
+					})
+				})
+
+				// Zamykanie modali po kliknięciu poza nimi
+				window.addEventListener('click', event => {
+					if (event.target === clientModal) {
+						clientModal.style.display = 'none'
+					}
+					if (event.target === viewClientModal) {
+						viewClientModal.style.display = 'none'
+					}
+				})
+			}
+
+			// Uruchomienie po załadowaniu strony
+			document.addEventListener('DOMContentLoaded', () => {
+				setupModals()
+
+				// Wyszukiwanie klientów
+				const searchInput = document.getElementById('client-search')
+				searchInput.addEventListener('input', () => {
+					const searchTerm = searchInput.value.toLowerCase()
+					const rows = document.querySelectorAll('.client-table tbody tr')
+
+					rows.forEach(row => {
+						const name = row.cells[0].textContent.toLowerCase()
+						const phone = row.cells[1].textContent.toLowerCase()
+						const email = row.cells[2].textContent.toLowerCase()
+
+						if (name.includes(searchTerm) || phone.includes(searchTerm) || email.includes(searchTerm)) {
+							row.style.display = ''
+						} else {
+							row.style.display = 'none'
+						}
+					})
+				})
+			})
+		</script>
+	</body>
+</html>

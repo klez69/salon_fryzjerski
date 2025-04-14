@@ -1,538 +1,834 @@
 <!DOCTYPE html>
 <html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kalendarz Rezerwacji - Panel Administracyjny</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="admin-style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
-    />
-    <style>
-      body {
-        display: none; /* Ukryj treść na początku, zostanie pokazana po sprawdzeniu logowania */
-      }
-    </style>
-  </head>
-  <body>
-    <div class="admin-container">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-header">
-          <div class="brand">
-            <i class="fas fa-spa"></i>
-            <h1>Nail Salon</h1>
-          </div>
-          <button class="sidebar-toggle" id="sidebar-toggle">
-            <i class="fas fa-bars"></i>
-          </button>
-        </div>
-        <div class="sidebar-content">
-          <div class="user-profile">
-            <div class="avatar">
-              <img
-                src="https://randomuser.me/api/portraits/women/68.jpg"
-                alt="Administrator"
-              />
-            </div>
-            <div class="user-info">
-              <h3>Admin</h3>
-              <p>Administrator</p>
-            </div>
-          </div>
-          <nav class="sidebar-menu">
-            <ul>
-              <li>
-                <a href="dashboard.html">
-                  <i class="fas fa-tachometer-alt"></i>
-                  <span>Pulpit</span>
-                </a>
-              </li>
-              <li class="active">
-                <a href="calendar.html">
-                  <i class="far fa-calendar-alt"></i>
-                  <span>Kalendarz</span>
-                </a>
-              </li>
-              <li>
-                <a href="#bookings">
-                  <i class="fas fa-clipboard-list"></i>
-                  <span>Rezerwacje</span>
-                </a>
-              </li>
-              <li>
-                <a href="#services">
-                  <i class="fas fa-concierge-bell"></i>
-                  <span>Usługi</span>
-                </a>
-              </li>
-              <li>
-                <a href="#clients">
-                  <i class="fas fa-users"></i>
-                  <span>Klienci</span>
-                </a>
-              </li>
-              <li>
-                <a href="statistics.html">
-                  <i class="fas fa-chart-bar"></i>
-                  <span>Statystyki</span>
-                </a>
-              </li>
-              <li>
-                <a href="#settings">
-                  <i class="fas fa-cog"></i>
-                  <span>Ustawienia</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <div class="sidebar-footer">
-          <a href="login.html" class="logout">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Wyloguj</span>
-          </a>
-        </div>
-      </aside>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Kalendarz Rezerwacji - Panel Administracyjny</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="admin-style.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+		<style>
+			body {
+				display: none; /* Ukryj treść na początku, zostanie pokazana po sprawdzeniu logowania */
+			}
 
-      <!-- Main Content -->
-      <main class="main-content">
-        <header class="header">
-          <div class="header-left">
-            <h2>Kalendarz Rezerwacji</h2>
-          </div>
-          <div class="header-right">
-            <div class="search-box">
-              <i class="fas fa-search"></i>
-              <input type="text" placeholder="Szukaj..." />
-            </div>
-            <div class="notifications">
-              <button class="notification-btn">
-                <i class="far fa-bell"></i>
-                <span class="notification-count">3</span>
-              </button>
-              <div class="notification-dropdown">
-                <div class="notification-header">
-                  <h3>Powiadomienia</h3>
-                  <a href="#">Oznacz wszystkie jako przeczytane</a>
-                </div>
-                <div class="notification-list">
-                  <div class="notification-item">
-                    <div class="notification-icon new">
-                      <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div class="notification-content">
-                      <h4>Nowa rezerwacja</h4>
-                      <p>Anna Kowalska zarezerwowała manicure</p>
-                      <span class="time">10 minut temu</span>
-                    </div>
-                  </div>
-                  <div class="notification-item">
-                    <div class="notification-icon new">
-                      <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="notification-content">
-                      <h4>Nowy klient</h4>
-                      <p>Jan Nowak zarejestrował się w systemie</p>
-                      <span class="time">2 godziny temu</span>
-                    </div>
-                  </div>
-                  <div class="notification-item">
-                    <div class="notification-icon">
-                      <i class="fas fa-exclamation-circle"></i>
-                    </div>
-                    <div class="notification-content">
-                      <h4>Niski stan zapasów</h4>
-                      <p>Lakier do paznokci #235 kończy się</p>
-                      <span class="time">1 dzień temu</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="notification-footer">
-                  <a href="#">Zobacz wszystkie powiadomienia</a>
-                </div>
-              </div>
-            </div>
-            <div class="user-dropdown">
-              <button class="user-btn">
-                <img
-                  src="https://randomuser.me/api/portraits/women/68.jpg"
-                  alt="Administrator"
-                />
-                <span>Admin</span>
-                <i class="fas fa-chevron-down"></i>
-              </button>
-              <div class="user-dropdown-menu">
-                <a href="#profile">
-                  <i class="fas fa-user"></i>
-                  <span>Profil</span>
-                </a>
-                <a href="#settings">
-                  <i class="fas fa-cog"></i>
-                  <span>Ustawienia</span>
-                </a>
-                <a href="login.html">
-                  <i class="fas fa-sign-out-alt"></i>
-                  <span>Wyloguj</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </header>
+			/* Dodatkowe style dla kalendarza */
+			#calendar {
+				min-height: 650px;
+				margin-bottom: 20px;
+			}
 
-        <div class="content">
-          <div class="card">
-            <div class="card-header">
-              <h3>Kalendarz Rezerwacji</h3>
-              <div class="card-actions">
-                <button class="btn btn-primary" id="add-appointment">
-                  <i class="fas fa-plus"></i> Dodaj rezerwację
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div id="calendar"></div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+			.dashboard-card.full-width {
+				padding-bottom: 20px;
+			}
 
-    <!-- Modal rezerwacji -->
-    <div id="appointment-modal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Dodaj nową rezerwację</h3>
-          <button class="close-modal" id="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="appointment-form">
-            <div class="form-group">
-              <label for="client-name">Imię i nazwisko klienta</label>
-              <input type="text" id="client-name" required />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="appointment-date">Data</label>
-                <input type="date" id="appointment-date" required />
-              </div>
-              <div class="form-group">
-                <label for="appointment-time">Godzina</label>
-                <input type="time" id="appointment-time" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="service-type">Usługa</label>
-              <select id="service-type" required>
-                <option value="">Wybierz usługę</option>
-                <option value="manicure-classic">
-                  Manicure Klasyczny (60 min)
-                </option>
-                <option value="manicure-hybrid">
-                  Manicure Hybrydowy (75 min)
-                </option>
-                <option value="pedicure-classic">
-                  Pedicure Klasyczny (60 min)
-                </option>
-                <option value="pedicure-hybrid">
-                  Pedicure Hybrydowy (90 min)
-                </option>
-                <option value="nail-art">Zdobienie paznokci (45 min)</option>
-                <option value="nail-extension">
-                  Przedłużanie paznokci (120 min)
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="client-phone">Telefon</label>
-              <input type="tel" id="client-phone" />
-            </div>
-            <div class="form-group">
-              <label for="appointment-notes">Dodatkowe uwagi</label>
-              <textarea id="appointment-notes" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="appointment-status">Status</label>
-              <select id="appointment-status">
-                <option value="pending">Oczekująca</option>
-                <option value="confirmed">Potwierdzona</option>
-                <option value="cancelled">Anulowana</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" id="cancel-appointment">
-            Anuluj
-          </button>
-          <button class="btn btn-primary" id="save-appointment">Zapisz</button>
-        </div>
-      </div>
-    </div>
+			.card-body {
+				padding: 15px;
+				overflow: auto;
+			}
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
-    <script>
-      // Sprawdź, czy użytkownik jest zalogowany - używamy JEDNEGO spójnego klucza
-      window.onload = function () {
-        const isLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
-        if (!isLoggedIn) {
-          console.log(
-            "Użytkownik nie jest zalogowany, przekierowuję do strony logowania"
-          );
-          window.location.href = "login.html";
-        } else {
-          console.log("Użytkownik zalogowany, wyświetlam panel");
-          document.body.style.display = "block";
-        }
-      };
+			.fc-timegrid-slot {
+				height: 40px !important;
+			}
 
-      // Dodaj obsługę wylogowania - używamy JEDNEGO spójnego klucza
-      document.addEventListener("DOMContentLoaded", function () {
-        const logoutLinks = document.querySelectorAll("a[href='login.html']");
-        logoutLinks.forEach((link) => {
-          link.addEventListener("click", function (e) {
-            localStorage.removeItem("adminLoggedIn");
-            console.log("Wylogowanie");
-          });
-        });
-      });
+			.fc-col-header-cell {
+				padding: 10px 0;
+				background-color: #f8f9fa;
+				font-weight: 600;
+			}
 
-      document.addEventListener("DOMContentLoaded", function () {
-        // Toggle sidebar
-        document
-          .getElementById("sidebar-toggle")
-          .addEventListener("click", function () {
-            document
-              .querySelector(".admin-container")
-              .classList.toggle("sidebar-collapsed");
-          });
+			.fc-timegrid-slot-label {
+				font-weight: 500;
+			}
 
-        // Dropdown toggles
-        document
-          .querySelector(".notification-btn")
-          .addEventListener("click", function (e) {
-            e.stopPropagation();
-            document
-              .querySelector(".notification-dropdown")
-              .classList.toggle("show");
-            document
-              .querySelector(".user-dropdown-menu")
-              .classList.remove("show");
-          });
+			.fc-daygrid-day-number,
+			.fc-col-header-cell-cushion {
+				padding: 8px;
+				color: #212529;
+				text-decoration: none;
+			}
 
-        document
-          .querySelector(".user-btn")
-          .addEventListener("click", function (e) {
-            e.stopPropagation();
-            document
-              .querySelector(".user-dropdown-menu")
-              .classList.toggle("show");
-            document
-              .querySelector(".notification-dropdown")
-              .classList.remove("show");
-          });
+			.fc-event {
+				padding: 2px 4px;
+				border-radius: 4px;
+				font-size: 13px;
+				cursor: pointer;
+			}
 
-        document.addEventListener("click", function () {
-          document
-            .querySelector(".notification-dropdown")
-            .classList.remove("show");
-          document
-            .querySelector(".user-dropdown-menu")
-            .classList.remove("show");
-        });
+			.fc .fc-button-primary {
+				background-color: #845ef7;
+				border-color: #845ef7;
+			}
 
-        // Inicjalizacja kalendarza
-        const calendarEl = document.getElementById("calendar");
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: "timeGridWeek",
-          headerToolbar: {
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
-          },
-          locale: "pl",
-          slotMinTime: "09:00:00",
-          slotMaxTime: "20:00:00",
-          slotDuration: "00:30:00",
-          allDaySlot: false,
-          height: "auto",
-          expandRows: true,
-          businessHours: {
-            daysOfWeek: [1, 2, 3, 4, 5, 6],
-            startTime: "09:00",
-            endTime: "20:00",
-          },
-          eventTimeFormat: {
-            hour: "2-digit",
-            minute: "2-digit",
-            meridiem: false,
-            hour12: false,
-          },
-          nowIndicator: true,
-          navLinks: true,
-          selectable: true,
-          selectMirror: true,
-          editable: true,
-          dayMaxEvents: true,
-          events: [
-            {
-              id: "1",
-              title: "Anna Kowalska - Manicure Hybrydowy",
-              start: "2024-07-15T10:00:00",
-              end: "2024-07-15T11:15:00",
-              backgroundColor: "#845ef7",
-              borderColor: "#845ef7",
-            },
-            {
-              id: "2",
-              title: "Maria Nowak - Pedicure Hybrydowy",
-              start: "2024-07-15T14:30:00",
-              end: "2024-07-15T16:00:00",
-              backgroundColor: "#845ef7",
-              borderColor: "#845ef7",
-            },
-            {
-              id: "3",
-              title: "Katarzyna Wiśniewska - Przedłużanie paznokci",
-              start: "2024-07-16T11:00:00",
-              end: "2024-07-16T13:00:00",
-              backgroundColor: "#845ef7",
-              borderColor: "#845ef7",
-            },
-            {
-              id: "4",
-              title: "Zofia Lis - Zdobienie paznokci",
-              start: "2024-07-17T16:00:00",
-              end: "2024-07-17T17:30:00",
-              backgroundColor: "#845ef7",
-              borderColor: "#845ef7",
-            },
-            {
-              id: "5",
-              title: "Aleksandra Dąbrowska - Manicure Klasyczny",
-              start: "2024-07-18T10:00:00",
-              end: "2024-07-18T11:00:00",
-              backgroundColor: "#845ef7",
-              borderColor: "#845ef7",
-            },
-          ],
-          select: function (info) {
-            document.getElementById("appointment-date").value =
-              info.startStr.split("T")[0];
-            if (info.startStr.includes("T")) {
-              const startTime = info.startStr.split("T")[1].substring(0, 5);
-              document.getElementById("appointment-time").value = startTime;
-            }
-            openModal();
-          },
-          eventClick: function (info) {
-            alert("Rezerwacja: " + info.event.title);
-            // Tutaj można dodać edycję istniejących rezerwacji
-          },
-        });
-        calendar.render();
+			.fc .fc-button-primary:hover {
+				background-color: #7048e8;
+				border-color: #7048e8;
+			}
 
-        // Obsługa modalu
-        const modal = document.getElementById("appointment-modal");
-        const addAppointmentBtn = document.getElementById("add-appointment");
-        const closeModalBtn = document.getElementById("close-modal");
-        const cancelBtn = document.getElementById("cancel-appointment");
-        const saveBtn = document.getElementById("save-appointment");
-        const appointmentForm = document.getElementById("appointment-form");
+			.fc .fc-button-primary:not(:disabled).fc-button-active,
+			.fc .fc-button-primary:not(:disabled):active {
+				background-color: #7048e8;
+				border-color: #7048e8;
+			}
 
-        function openModal() {
-          modal.style.display = "block";
-        }
+			/* Styl dla dziś */
+			.fc .fc-daygrid-day.fc-day-today,
+			.fc .fc-timegrid-col.fc-day-today {
+				background-color: rgba(132, 94, 247, 0.1);
+			}
 
-        function closeModal() {
-          modal.style.display = "none";
-          appointmentForm.reset();
-        }
+			/* Responsywność kalendarza */
+			@media (max-width: 768px) {
+				#calendar {
+					min-height: 500px;
+				}
 
-        addAppointmentBtn.addEventListener("click", openModal);
-        closeModalBtn.addEventListener("click", closeModal);
-        cancelBtn.addEventListener("click", closeModal);
+				.fc-toolbar.fc-header-toolbar {
+					flex-direction: column;
+					gap: 10px;
+				}
 
-        // Kliknięcie poza modalem zamyka go
-        window.addEventListener("click", function (event) {
-          if (event.target === modal) {
-            closeModal();
-          }
-        });
+				.fc-toolbar-chunk {
+					display: flex;
+					justify-content: center;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<div class="logo">
+					<i class="fas fa-spa"></i>
+					<span>BeautyAdmin</span>
+				</div>
+				<div class="sidebar-nav">
+					<ul>
+						<li>
+							<a href="dashboard.html">
+								<i class="fas fa-tachometer-alt"></i>
+								<span>Dashboard</span>
+							</a>
+						</li>
+						<li class="active">
+							<a href="calendar.html">
+								<i class="fas fa-calendar-alt"></i>
+								<span>Kalendarz</span>
+							</a>
+						</li>
+						<li>
+							<a href="clients.html">
+								<i class="fas fa-users"></i>
+								<span>Klienci</span>
+							</a>
+						</li>
+						<li>
+							<a href="services.html">
+								<i class="fas fa-list-alt"></i>
+								<span>Usługi</span>
+							</a>
+						</li>
+						<li>
+							<a href="statistics.html">
+								<i class="fas fa-chart-bar"></i>
+								<span>Statystyki</span>
+							</a>
+						</li>
+						<li>
+							<a href="settings.html">
+								<i class="fas fa-cog"></i>
+								<span>Ustawienia</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="sidebar-footer">
+					<a href="../nail-salon-template.html">
+						<i class="fas fa-sign-out-alt"></i>
+						<span>Powrót do strony</span>
+					</a>
+				</div>
+			</div>
 
-        saveBtn.addEventListener("click", function () {
-          const clientName = document.getElementById("client-name").value;
-          const appointmentDate =
-            document.getElementById("appointment-date").value;
-          const appointmentTime =
-            document.getElementById("appointment-time").value;
-          const serviceType = document.getElementById("service-type");
-          const serviceName =
-            serviceType.options[serviceType.selectedIndex].text;
-          const status = document.getElementById("appointment-status").value;
+			<!-- Main Content -->
+			<div class="main-content">
+				<div class="main-header">
+					<div class="header-search">
+						<i class="fas fa-search"></i>
+						<input type="text" placeholder="Szukaj..." />
+					</div>
+					<div class="header-user">
+						<div class="notifications">
+							<i class="fas fa-bell"></i>
+							<span class="notification-badge">3</span>
+						</div>
+						<div class="user-info">
+							<span>Admin</span>
+							<img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Admin" />
+						</div>
+					</div>
+				</div>
 
-          if (
-            clientName &&
-            appointmentDate &&
-            appointmentTime &&
-            serviceType.value
-          ) {
-            // Pobierz czas trwania usługi z nazwy usługi
-            const durationMatch = serviceName.match(/\((\d+)\s*min\)/);
-            const durationMinutes = durationMatch
-              ? parseInt(durationMatch[1])
-              : 60;
+				<div class="dashboard-content">
+					<h1>Kalendarz Rezerwacji</h1>
 
-            // Ustal kolor wydarzenia na podstawie statusu
-            let backgroundColor = "#845ef7"; // domyślny kolor (potwierdzona)
-            if (status === "pending") {
-              backgroundColor = "#fab005"; // oczekująca
-            } else if (status === "cancelled") {
-              backgroundColor = "#fa5252"; // anulowana
-            }
+					<div class="dashboard-card full-width">
+						<div class="card-header">
+							<h3>Kalendarz Rezerwacji</h3>
+							<div class="card-actions">
+								<button class="btn btn-primary" id="add-appointment">
+									<i class="fas fa-plus"></i> Dodaj rezerwację
+								</button>
+								<button class="btn btn-secondary" id="reload-appointments" style="margin-left: 10px">
+									<i class="fas fa-sync-alt"></i> Odśwież rezerwacje
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div id="calendar"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-            // Stwórz czas rozpoczęcia i zakończenia
-            const startDateTime = `${appointmentDate}T${appointmentTime}:00`;
-            const endDateTime = new Date(
-              new Date(`${appointmentDate}T${appointmentTime}`).getTime() +
-                durationMinutes * 60 * 1000
-            )
-              .toISOString()
-              .replace(/\.\d+Z$/, "");
+		<!-- Modal rezerwacji -->
+		<div id="appointment-modal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Dodaj nową rezerwację</h3>
+					<button class="close-modal" id="close-modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form id="appointment-form">
+						<div class="form-group">
+							<label for="client-name">Imię i nazwisko klienta</label>
+							<input type="text" id="client-name" required />
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="appointment-date">Data</label>
+								<input type="date" id="appointment-date" required />
+							</div>
+							<div class="form-group">
+								<label for="appointment-time">Godzina</label>
+								<input type="time" id="appointment-time" required />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="service-type">Usługa</label>
+							<select id="service-type" required>
+								<option value="">Wybierz usługę</option>
+								<option value="manicure-classic">Manicure Klasyczny (60 min)</option>
+								<option value="manicure-hybrid">Manicure Hybrydowy (75 min)</option>
+								<option value="pedicure-classic">Pedicure Klasyczny (60 min)</option>
+								<option value="pedicure-hybrid">Pedicure Hybrydowy (90 min)</option>
+								<option value="nail-art">Zdobienie paznokci (45 min)</option>
+								<option value="nail-extension">Przedłużanie paznokci (120 min)</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="client-phone">Telefon</label>
+							<input type="tel" id="client-phone" />
+						</div>
+						<div class="form-group">
+							<label for="appointment-notes">Dodatkowe uwagi</label>
+							<textarea id="appointment-notes" rows="3"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="appointment-status">Status</label>
+							<select id="appointment-status">
+								<option value="pending">Oczekująca</option>
+								<option value="confirmed">Potwierdzona</option>
+								<option value="cancelled">Anulowana</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" id="cancel-appointment">Anuluj</button>
+					<button class="btn btn-primary" id="save-appointment">Zapisz</button>
+				</div>
+			</div>
+		</div>
 
-            // Dodaj wydarzenie do kalendarza
-            calendar.addEvent({
-              title: `${clientName} - ${serviceName.split(" (")[0]}`,
-              start: startDateTime,
-              end: endDateTime,
-              backgroundColor: backgroundColor,
-              borderColor: backgroundColor,
-            });
+		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
+		<script>
+			// Sprawdź, czy użytkownik jest zalogowany - używamy JEDNEGO spójnego klucza
+			window.onload = function () {
+				// Debugowanie localStorage - sprawdź wszystkie zapisane dane
+				console.log('===== DEBUG LOCALSTORAGE =====')
+				for (let i = 0; i < localStorage.length; i++) {
+					const key = localStorage.key(i)
+					const value = localStorage.getItem(key)
+					console.log(`${key}: ${value}`)
+				}
+				console.log('============================')
 
-            closeModal();
+				// Sprawdź, czy mamy dane rezerwacji
+				const salonAppointments = localStorage.getItem('salonAppointments')
+				console.log('Dane rezerwacji bezpośrednio z localStorage:', salonAppointments)
 
-            // Powiadomienie o dodaniu rezerwacji
-            alert("Rezerwacja została dodana!");
-          } else {
-            alert("Wypełnij wszystkie wymagane pola!");
-          }
-        });
-      });
-    </script>
-  </body>
+				// Standardowa weryfikacja logowania
+				const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true'
+				if (!isLoggedIn) {
+					console.log('Użytkownik nie jest zalogowany, przekierowuję do strony logowania')
+					window.location.href = 'login.html'
+				} else {
+					console.log('Użytkownik zalogowany, wyświetlam panel')
+					document.body.style.display = 'block'
+				}
+			}
+
+			// Dodaj obsługę wylogowania - używamy JEDNEGO spójnego klucza
+			document.addEventListener('DOMContentLoaded', function () {
+				const logoutLinks = document.querySelectorAll("a[href='login.html']")
+				logoutLinks.forEach(link => {
+					link.addEventListener('click', function (e) {
+						localStorage.removeItem('adminLoggedIn')
+						console.log('Wylogowanie')
+					})
+				})
+			})
+
+			document.addEventListener('DOMContentLoaded', function () {
+				// Inicjalizacja kalendarza
+				const calendarEl = document.getElementById('calendar')
+				const calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'timeGridWeek',
+					headerToolbar: {
+						left: 'prev,next today',
+						center: 'title',
+						right: 'dayGridMonth,timeGridWeek,timeGridDay',
+					},
+					locale: 'pl',
+					slotMinTime: '09:00:00',
+					slotMaxTime: '20:00:00',
+					slotDuration: '00:30:00',
+					allDaySlot: false,
+					height: 'auto',
+					contentHeight: 650,
+					aspectRatio: 1.8,
+					expandRows: true,
+					stickyHeaderDates: true,
+					handleWindowResize: true,
+					businessHours: {
+						daysOfWeek: [1, 2, 3, 4, 5, 6],
+						startTime: '09:00',
+						endTime: '20:00',
+					},
+					eventTimeFormat: {
+						hour: '2-digit',
+						minute: '2-digit',
+						meridiem: false,
+						hour12: false,
+					},
+					slotLabelFormat: {
+						hour: '2-digit',
+						minute: '2-digit',
+						hour12: false,
+					},
+					nowIndicator: true,
+					navLinks: true,
+					selectable: true,
+					selectMirror: true,
+					editable: true,
+					dayMaxEvents: true,
+					eventClick: function (info) {
+						alert('Rezerwacja: ' + info.event.title)
+						// Tutaj można dodać edycję istniejących rezerwacji
+					},
+					select: function (info) {
+						document.getElementById('appointment-date').value = info.startStr.split('T')[0]
+						if (info.startStr.includes('T')) {
+							const startTime = info.startStr.split('T')[1].substring(0, 5)
+							document.getElementById('appointment-time').value = startTime
+						}
+						openModal()
+					},
+				})
+
+				// Renderuj kalendarz
+				calendar.render()
+
+				// Dodaj bezpośrednio przykładowe rezerwacje, które będą zawsze widoczne
+				// Te rezerwacje są dodawane niezależnie od localStorage
+				function addHardcodedAppointments() {
+					console.log('Dodaję przykładowe rezerwacje na stałe')
+
+					// Aktualny miesiąc i rok
+					const today = new Date()
+					const currentMonth = today.getMonth() + 1
+					const currentYear = today.getFullYear()
+					const currentDay = today.getDate()
+
+					// Format dat
+					const formatNumber = num => num.toString().padStart(2, '0')
+
+					// Stałe rezerwacje na bieżący miesiąc
+					const hardCodedAppointments = [
+						{
+							id: 'hardcoded-1',
+							title: 'Anna Kowalska - Manicure Hybrydowy',
+							start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 1)}T10:00:00`,
+							end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 1)}T11:15:00`,
+							backgroundColor: '#845ef7',
+							borderColor: '#845ef7',
+						},
+						{
+							id: 'hardcoded-2',
+							title: 'Maria Nowak - Pedicure Hybrydowy',
+							start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 2)}T14:30:00`,
+							end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 2)}T16:00:00`,
+							backgroundColor: '#fab005',
+							borderColor: '#fab005',
+						},
+						{
+							id: 'hardcoded-3',
+							title: 'Katarzyna Wiśniewska - Przedłużanie paznokci',
+							start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}T11:00:00`,
+							end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}T13:00:00`,
+							backgroundColor: '#845ef7',
+							borderColor: '#845ef7',
+						},
+						{
+							id: 'hardcoded-4',
+							title: 'Zofia Lis - Zdobienie paznokci',
+							start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 3)}T16:00:00`,
+							end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 3)}T17:30:00`,
+							backgroundColor: '#845ef7',
+							borderColor: '#845ef7',
+						},
+						{
+							id: 'hardcoded-5',
+							title: 'Aleksandra Dąbrowska - Manicure Klasyczny',
+							start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay - 1)}T10:00:00`,
+							end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay - 1)}T11:00:00`,
+							backgroundColor: '#fa5252',
+							borderColor: '#fa5252',
+						},
+					]
+
+					// Dodaj każdą rezerwację do kalendarza
+					hardCodedAppointments.forEach(appointment => {
+						calendar.addEvent(appointment)
+					})
+
+					console.log('Dodano stałe rezerwacje do kalendarza:', hardCodedAppointments.length)
+				}
+
+				// Dodaj stałe rezerwacje
+				addHardcodedAppointments()
+
+				// Załaduj rezerwacje ze strony głównej
+				loadAppointmentsFromLocalStorage()
+
+				// Dodaj predefiniowane wydarzenia na początku
+				let defaultEventsAdded = false
+
+				// Standardowe wydarzenia, które będą zawsze widoczne (możesz usunąć lub zmienić)
+				function addDefaultEvents() {
+					if (defaultEventsAdded) return
+
+					// Dodaj dzisiejszą datę
+					const today = new Date()
+					const currentMonth = today.getMonth() + 1
+					const currentYear = today.getFullYear()
+
+					// Dostosuj daty wydarzeń do bieżącego miesiąca
+					calendar.addEvent({
+						id: '1',
+						title: 'Anna Kowalska - Manicure Hybrydowy',
+						start: `${currentYear}-${currentMonth.toString().padStart(2, '0')}-15T10:00:00`,
+						end: `${currentYear}-${currentMonth.toString().padStart(2, '0')}-15T11:15:00`,
+						backgroundColor: '#845ef7',
+						borderColor: '#845ef7',
+					})
+
+					calendar.addEvent({
+						id: '2',
+						title: 'Maria Nowak - Pedicure Hybrydowy',
+						start: `${currentYear}-${currentMonth.toString().padStart(2, '0')}-20T14:30:00`,
+						end: `${currentYear}-${currentMonth.toString().padStart(2, '0')}-20T16:00:00`,
+						backgroundColor: '#845ef7',
+						borderColor: '#845ef7',
+					})
+
+					defaultEventsAdded = true
+				}
+
+				// Jeśli nie ma rezerwacji, pokaż domyślne wydarzenia
+				setTimeout(() => {
+					if (calendar.getEvents().length === 0) {
+						console.log('Brak rezerwacji - dodaję wydarzenia domyślne')
+						addDefaultEvents()
+					}
+				}, 500)
+
+				// Funkcja do wczytywania rezerwacji ze strony głównej
+				function loadAppointmentsFromLocalStorage() {
+					try {
+						// Pobierz zapisane rezerwacje
+						const savedAppointmentsJSON = localStorage.getItem('salonAppointments')
+						console.log('Próba wczytania rezerwacji z localStorage. Dane:', savedAppointmentsJSON)
+
+						if (!savedAppointmentsJSON) {
+							console.log('Brak zapisanych rezerwacji w localStorage')
+							// TESTOWE DANE - dodaj przykładową rezerwację jeśli nie ma żadnych
+							const testAppointment = {
+								id: 'test-' + Date.now(),
+								clientName: 'Testowy Klient',
+								clientEmail: 'test@example.com',
+								clientPhone: '123456789',
+								serviceType: 'gel-manicure',
+								serviceName: 'Manicure Hybrydowy (75 min)',
+								date: new Date().toISOString().split('T')[0], // Dzisiejsza data
+								time: '14:00', // Godzina 14:00
+								notes: 'Rezerwacja testowa - automatycznie wygenerowana',
+								status: 'pending',
+							}
+
+							// Zapisz testową rezerwację
+							const testAppointments = [testAppointment]
+							localStorage.setItem('salonAppointments', JSON.stringify(testAppointments))
+							console.log('Utworzono testową rezerwację:', testAppointment)
+
+							// Dodaj wydarzenie do kalendarza
+							addAppointmentToCalendar(testAppointment, 0)
+							return
+						}
+
+						// Próba naprawy zepsutego formatu JSON
+						let savedAppointments
+						try {
+							savedAppointments = JSON.parse(savedAppointmentsJSON)
+						} catch (jsonError) {
+							console.error('Błąd parsowania JSON, próba naprawy:', jsonError)
+							// Próba naprawy - usuń nieprawidłowe znaki
+							const cleanedJSON = savedAppointmentsJSON.replace(/[^\x20-\x7E]/g, '')
+							try {
+								savedAppointments = JSON.parse(cleanedJSON)
+							} catch (e) {
+								console.error('Nie udało się naprawić JSON. Używam pustej tablicy.')
+								savedAppointments = []
+							}
+						}
+
+						// Upewnij się, że mamy tablicę
+						if (!Array.isArray(savedAppointments)) {
+							console.error('Dane rezerwacji nie są tablicą:', savedAppointments)
+							savedAppointments = []
+						}
+
+						console.log('Pomyślnie sparsowano dane, liczba rezerwacji:', savedAppointments.length)
+
+						// Dodaj każdą rezerwację do kalendarza
+						savedAppointments.forEach((appointment, index) => {
+							addAppointmentToCalendar(appointment, index)
+						})
+
+						console.log('Załadowano ' + savedAppointments.length + ' rezerwacji ze strony głównej')
+					} catch (error) {
+						console.error('Błąd podczas wczytywania rezerwacji:', error)
+					}
+				}
+
+				// Pomocnicza funkcja do dodawania rezerwacji do kalendarza
+				function addAppointmentToCalendar(appointment, index) {
+					console.log(`Przetwarzanie rezerwacji #${index + 1}:`, appointment)
+
+					try {
+						// Przygotuj dane rezerwacji dla kalendarza
+
+						// Sprawdź, czy mamy wszystkie potrzebne dane
+						if (!appointment.date || !appointment.time || !appointment.clientName) {
+							console.error('Niepełne dane rezerwacji:', appointment)
+							return
+						}
+
+						// Pobierz czas trwania usługi
+						let durationMinutes = 60 // Domyślnie 60 minut
+						if (appointment.serviceName) {
+							const durationMatch = appointment.serviceName.match(/\((\d+)\s*min\)/)
+							if (durationMatch) {
+								durationMinutes = parseInt(durationMatch[1])
+							}
+						}
+
+						// Ustal kolor wydarzenia na podstawie statusu
+						let backgroundColor = '#845ef7' // domyślny kolor (potwierdzona)
+						if (appointment.status === 'pending') {
+							backgroundColor = '#fab005' // oczekująca
+						} else if (appointment.status === 'cancelled') {
+							backgroundColor = '#fa5252' // anulowana
+						}
+
+						// Ustaw czas rozpoczęcia i zakończenia
+						const startDateTime = `${appointment.date}T${appointment.time}:00`
+
+						// Oblicz czas zakończenia - obsłuż różne formaty daty
+						let endTime
+						try {
+							endTime = new Date(`${appointment.date}T${appointment.time}`)
+							endTime.setMinutes(endTime.getMinutes() + durationMinutes)
+							const endDateTime = endTime.toISOString().replace(/\.\d+Z$/, '')
+
+							// Dodaj wydarzenie do kalendarza
+							const eventData = {
+								id: appointment.id || 'lsappt-' + Date.now() + '-' + index,
+								title: `${appointment.clientName} - ${appointment.serviceName || 'Rezerwacja'}`,
+								start: startDateTime,
+								end: endDateTime,
+								backgroundColor: backgroundColor,
+								borderColor: backgroundColor,
+								extendedProps: {
+									email: appointment.clientEmail,
+									phone: appointment.clientPhone,
+									notes: appointment.notes,
+									status: appointment.status,
+								},
+							}
+
+							const eventAdded = calendar.addEvent(eventData)
+							console.log('Dodano wydarzenie do kalendarza:', eventAdded.title)
+						} catch (dateError) {
+							console.error('Błąd przetwarzania daty rezerwacji:', dateError, 'Dane rezerwacji:', appointment)
+
+							// Alternatywne podejście - użyj dzisiejszej daty i godziny jako fallback
+							try {
+								const today = new Date()
+								const fallbackDate = today.toISOString().split('T')[0]
+								const fallbackTime = '12:00'
+								const fallbackStart = `${fallbackDate}T${fallbackTime}:00`
+
+								today.setHours(12)
+								today.setMinutes(0)
+								today.setMinutes(today.getMinutes() + durationMinutes)
+								const fallbackEnd = today.toISOString().replace(/\.\d+Z$/, '')
+
+								// Dodaj wydarzenie do kalendarza z datą awaryjną
+								const eventData = {
+									id: appointment.id || 'fallback-' + Date.now() + '-' + index,
+									title: `[BŁĄD DATY] ${appointment.clientName} - ${appointment.serviceName || 'Rezerwacja'}`,
+									start: fallbackStart,
+									end: fallbackEnd,
+									backgroundColor: '#fa5252', // czerwony dla błędnych dat
+									borderColor: '#fa5252',
+									extendedProps: {
+										email: appointment.clientEmail,
+										phone: appointment.clientPhone,
+										notes: `[BŁĄD DATY] ${appointment.notes || ''}`,
+										status: 'error',
+									},
+								}
+
+								const eventAdded = calendar.addEvent(eventData)
+								console.log('Dodano wydarzenie awaryjne do kalendarza:', eventAdded.title)
+							} catch (fallbackError) {
+								console.error('Nie udało się dodać nawet awaryjnego wydarzenia:', fallbackError)
+							}
+						}
+					} catch (processError) {
+						console.error('Błąd podczas przetwarzania rezerwacji:', processError)
+					}
+				}
+
+				// Obsługa modalu
+				const modal = document.getElementById('appointment-modal')
+				const addAppointmentBtn = document.getElementById('add-appointment')
+				const closeModalBtn = document.getElementById('close-modal')
+				const cancelBtn = document.getElementById('cancel-appointment')
+				const saveBtn = document.getElementById('save-appointment')
+				const appointmentForm = document.getElementById('appointment-form')
+				const reloadBtn = document.getElementById('reload-appointments')
+
+				// Dodaj przykładową rezerwację do kalendarza
+				function addSampleAppointment() {
+					// Dzisiejsza data
+					const today = new Date()
+					const todayISO = today.toISOString().split('T')[0]
+
+					// Utwórz testową rezerwację - zawsze na godzinę 14:00 dzisiaj
+					const sampleAppointment = {
+						id: 'sample-' + Date.now(),
+						clientName: 'Maria Przykładowa',
+						clientEmail: 'maria@example.com',
+						clientPhone: '555-123-456',
+						serviceType: 'manicure-hybrid',
+						serviceName: 'Manicure Hybrydowy (75 min)',
+						date: todayISO,
+						time: '14:00',
+						notes: 'Przykładowa rezerwacja dodana manualnie',
+						status: 'pending',
+					}
+
+					console.log('Dodaję przykładową rezerwację:', sampleAppointment)
+
+					// Dodaj do kalendarza
+					addAppointmentToCalendar(sampleAppointment, 0)
+
+					// Dodaj do localStorage
+					try {
+						let appointments = JSON.parse(localStorage.getItem('salonAppointments')) || []
+						appointments.push(sampleAppointment)
+						localStorage.setItem('salonAppointments', JSON.stringify(appointments))
+						console.log('Zapisano przykładową rezerwację w localStorage')
+					} catch (error) {
+						console.error('Błąd podczas zapisywania przykładowej rezerwacji:', error)
+					}
+
+					alert('Dodano przykładową rezerwację na dzisiaj o 14:00')
+				}
+
+				function openModal() {
+					modal.style.display = 'block'
+				}
+
+				function closeModal() {
+					modal.style.display = 'none'
+					appointmentForm.reset()
+				}
+
+				addAppointmentBtn.addEventListener('click', openModal)
+				closeModalBtn.addEventListener('click', closeModal)
+				cancelBtn.addEventListener('click', closeModal)
+
+				// Obsługa przycisku odświeżania rezerwacji
+				reloadBtn.addEventListener('click', function () {
+					// Wyczyść istniejące wydarzenia
+					calendar.removeAllEvents()
+
+					// Dodaj ponownie stałe rezerwacje
+					addHardcodedAppointments()
+
+					// Załaduj ponownie rezerwacje z localStorage
+					loadAppointmentsFromLocalStorage()
+
+					// Dodaj ręcznie nową rezerwację (zostanie wyświetlona niezależnie od localStorage)
+					const today = new Date()
+					const tomorrow = new Date(today)
+					tomorrow.setDate(today.getDate() + 1)
+
+					const manualAppointment = {
+						id: 'manual-' + Date.now(),
+						title: 'Elżbieta Nowak - Manicure Hybrydowy',
+						start: `${tomorrow.getFullYear()}-${(tomorrow.getMonth() + 1).toString().padStart(2, '0')}-${tomorrow
+							.getDate()
+							.toString()
+							.padStart(2, '0')}T12:00:00`,
+						end: `${tomorrow.getFullYear()}-${(tomorrow.getMonth() + 1).toString().padStart(2, '0')}-${tomorrow
+							.getDate()
+							.toString()
+							.padStart(2, '0')}T13:15:00`,
+						backgroundColor: '#fab005',
+						borderColor: '#fab005',
+					}
+
+					calendar.addEvent(manualAppointment)
+					console.log('Dodano ręczną rezerwację:', manualAppointment)
+
+					alert('Kalendarz został odświeżony i dodano nową rezerwację.')
+				})
+
+				// Kliknięcie poza modalem zamyka go
+				window.addEventListener('click', function (event) {
+					if (event.target === modal) {
+						closeModal()
+					}
+				})
+
+				saveBtn.addEventListener('click', function () {
+					const clientName = document.getElementById('client-name').value
+					const appointmentDate = document.getElementById('appointment-date').value
+					const appointmentTime = document.getElementById('appointment-time').value
+					const serviceType = document.getElementById('service-type')
+					const serviceName = serviceType.options[serviceType.selectedIndex].text
+					const clientPhone = document.getElementById('client-phone').value
+					const appointmentNotes = document.getElementById('appointment-notes').value
+					const status = document.getElementById('appointment-status').value
+
+					if (clientName && appointmentDate && appointmentTime && serviceType.value) {
+						// Pobierz czas trwania usługi z nazwy usługi
+						const durationMatch = serviceName.match(/\((\d+)\s*min\)/)
+						const durationMinutes = durationMatch ? parseInt(durationMatch[1]) : 60
+
+						// Ustal kolor wydarzenia na podstawie statusu
+						let backgroundColor = '#845ef7' // domyślny kolor (potwierdzona)
+						if (status === 'pending') {
+							backgroundColor = '#fab005' // oczekująca
+						} else if (status === 'cancelled') {
+							backgroundColor = '#fa5252' // anulowana
+						}
+
+						// Stwórz czas rozpoczęcia i zakończenia
+						const startDateTime = `${appointmentDate}T${appointmentTime}:00`
+						const endDateTime = new Date(
+							new Date(`${appointmentDate}T${appointmentTime}`).getTime() + durationMinutes * 60 * 1000
+						)
+							.toISOString()
+							.replace(/\.\d+Z$/, '')
+
+						// Dodaj wydarzenie do kalendarza
+						const newEventId = Date.now().toString()
+						calendar.addEvent({
+							id: newEventId,
+							title: `${clientName} - ${serviceName.split(' (')[0]}`,
+							start: startDateTime,
+							end: endDateTime,
+							backgroundColor: backgroundColor,
+							borderColor: backgroundColor,
+							extendedProps: {
+								phone: clientPhone,
+								notes: appointmentNotes,
+								status: status,
+							},
+						})
+
+						// Zapisz również w localStorage
+						try {
+							// Pobierz istniejące rezerwacje lub utwórz pustą tablicę
+							let appointments = JSON.parse(localStorage.getItem('salonAppointments')) || []
+
+							// Dodaj nową rezerwację
+							const newAppointment = {
+								id: newEventId,
+								clientName: clientName,
+								clientPhone: clientPhone,
+								serviceType: serviceType.value,
+								serviceName: serviceName,
+								date: appointmentDate,
+								time: appointmentTime,
+								notes: appointmentNotes,
+								status: status,
+							}
+
+							appointments.push(newAppointment)
+
+							// Zapisz z powrotem do localStorage
+							localStorage.setItem('salonAppointments', JSON.stringify(appointments))
+
+							console.log('Rezerwacja zapisana w localStorage')
+						} catch (error) {
+							console.error('Błąd podczas zapisywania rezerwacji w localStorage:', error)
+						}
+
+						closeModal()
+
+						// Powiadomienie o dodaniu rezerwacji
+						alert('Rezerwacja została dodana!')
+					} else {
+						alert('Wypełnij wszystkie wymagane pola!')
+					}
+				})
+			})
+		</script>
+	</body>
 </html>

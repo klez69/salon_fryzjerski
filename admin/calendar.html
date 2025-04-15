@@ -1,1364 +1,1504 @@
 <!DOCTYPE html>
 <html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Kalendarz Rezerwacji - Panel Administracyjny</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="admin-style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
-    />
-    <style>
-      body {
-        display: none; /* Ukryj treść na początku, zostanie pokazana po sprawdzeniu logowania */
-      }
-
-      /* Dodatkowe styles dla kalendarza */
-      #calendar {
-        min-height: 650px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd !important;
-      }
-
-      /* Dodatkowe wymuszone styles dla ramek kalendarza */
-      .fc-theme-standard .fc-scrollgrid {
-        border: 1px solid #ddd !important;
-      }
-
-      .fc-theme-standard td,
-      .fc-theme-standard th {
-        border: 1px solid #ddd !important;
-      }
-
-      .fc-scrollgrid-section-header > th {
-        border: 1px solid #ddd !important;
-        background-color: #f8f9fa !important;
-      }
-
-      .fc-col-header-cell {
-        background-color: #f8f9fa !important;
-      }
-
-      .fc-day,
-      .fc-day-top,
-      .fc-daygrid-day {
-        border: 1px solid #ddd !important;
-      }
-
-      .fc-timegrid-slot {
-        border-bottom: 1px solid #ddd !important;
-        height: 40px !important;
-      }
-
-      .dashboard-card.full-width {
-        padding-bottom: 20px;
-      }
-
-      .card-body {
-        padding: 15px;
-        overflow: auto;
-      }
-
-      .fc-timegrid-slot {
-        height: 40px !important;
-      }
-
-      .fc-col-header-cell {
-        padding: 10px 0;
-        background-color: #f8f9fa;
-        font-weight: 600;
-      }
-
-      .fc-timegrid-slot-label {
-        font-weight: 500;
-      }
-
-      .fc-daygrid-day-number,
-      .fc-col-header-cell-cushion {
-        padding: 8px;
-        color: #212529;
-        text-decoration: none;
-      }
-
-      .fc-event {
-        padding: 2px 4px;
-        border-radius: 4px;
-        font-size: 13px;
-        cursor: pointer;
-      }
-
-      .fc .fc-button-primary {
-        background-color: #845ef7;
-        border-color: #845ef7;
-      }
-
-      .fc .fc-button-primary:hover {
-        background-color: #7048e8;
-        border-color: #7048e8;
-      }
-
-      .fc .fc-button-primary:not(:disabled).fc-button-active,
-      .fc .fc-button-primary:not(:disabled):active {
-        background-color: #7048e8;
-        border-color: #7048e8;
-      }
-
-      /* Styl dla dziś */
-      .fc .fc-daygrid-day.fc-day-today,
-      .fc .fc-timegrid-col.fc-day-today {
-        background-color: rgba(132, 94, 247, 0.1);
-      }
-
-      /* Responsywność kalendarza */
-      @media (max-width: 768px) {
-        #calendar {
-          min-height: 500px;
-        }
-
-        .fc-toolbar.fc-header-toolbar {
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .fc-toolbar-chunk {
-          display: flex;
-          justify-content: center;
-        }
-      }
-
-      /* Mobilne styles dla poprawy responsywności */
-      @media (max-width: 768px) {
-        /* Zmniejsz i dostosuj sidebar */
-        .sidebar {
-          width: 220px;
-          transform: translateX(-100%);
-          z-index: 1050;
-          transition: transform 0.3s ease;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .sidebar.mobile-show {
-          transform: translateX(0);
-        }
-
-        /* Usuń margines dla głównej treści gdy sidebar jest schowany */
-        .main-content {
-          margin-left: 0 !important;
-          width: 100% !important;
-          transition: margin-left 0.3s ease;
-        }
-
-        /* Dodaj przycisk menu hamburger dla widoku mobilnego */
-        .mobile-menu-toggle {
-          display: flex !important;
-          position: fixed;
-          top: 10px;
-          left: 10px;
-          z-index: 1060;
-          background-color: var(--primary-color);
-          color: white;
-          border: none;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Dostosowanie headera */
-        .header {
-          padding: 0 15px;
-        }
-
-        .header-left h2 {
-          font-size: 16px;
-        }
-
-        .search-box {
-          display: none;
-        }
-
-        /* Zmniejsz paddingów */
-        .content {
-          padding: 15px;
-        }
-
-        /* Poprawki dla FullCalendar */
-        .fc .fc-toolbar.fc-header-toolbar {
-          flex-direction: column;
-          gap: 10px;
-          margin-bottom: 10px;
-        }
-
-        .fc .fc-toolbar-title {
-          font-size: 1.2em;
-        }
-
-        /* Modyfikacja modala */
-        .modal-content {
-          width: 95%;
-          max-width: 350px;
-        }
-
-        /* Popraw wygląd formularza */
-        .form-row {
-          grid-template-columns: 1fr;
-        }
-
-        /* Dodatkowe poprawki dla mobile */
-        .user-dropdown-menu {
-          right: -10px;
-          width: 180px;
-        }
-
-        .notification-dropdown {
-          right: -140px;
-          width: 280px;
-        }
-      }
-
-      /* Ukryj menu toggle domyślnie */
-      .mobile-menu-toggle {
-        display: none;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Dodajemy przycisk menu dla widoku mobilnego -->
-    <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="dashboard-container">
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <div class="logo">
-          <i class="fas fa-spa"></i>
-          <span>BeautyAdmin</span>
-        </div>
-        <div class="sidebar-nav">
-          <ul>
-            <li>
-              <a href="dashboard.html">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-              </a>
-            </li>
-            <li class="active">
-              <a href="calendar.html">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Kalendarz</span>
-              </a>
-            </li>
-            <li>
-              <a href="clients.html">
-                <i class="fas fa-users"></i>
-                <span>Klienci</span>
-              </a>
-            </li>
-            <li>
-              <a href="services.html">
-                <i class="fas fa-list-alt"></i>
-                <span>Usługi</span>
-              </a>
-            </li>
-            <li>
-              <a href="statistics.html">
-                <i class="fas fa-chart-bar"></i>
-                <span>Statystyki</span>
-              </a>
-            </li>
-            <li>
-              <a href="settings.html">
-                <i class="fas fa-cog"></i>
-                <span>Ustawienia</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="sidebar-footer">
-          <a href="../index.html">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Powrót do strony</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="main-header">
-          <div class="header-search">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Szukaj..." />
-          </div>
-          <div class="header-user">
-            <div class="notifications">
-              <i class="fas fa-bell"></i>
-              <span class="notification-badge">3</span>
-            </div>
-            <div class="user-info">
-              <span>Admin</span>
-              <img src="" alt="Admin" />
-            </div>
-          </div>
-        </div>
-
-        <div class="dashboard-content">
-          <h1>Kalendarz Rezerwacji</h1>
-
-          <div class="dashboard-card full-width">
-            <div class="card-header">
-              <h3>Kalendarz Rezerwacji</h3>
-              <div class="card-actions">
-                <button class="btn btn-primary" id="add-appointment">
-                  <i class="fas fa-plus"></i> Dodaj rezerwację
-                </button>
-                <button
-                  class="btn btn-secondary"
-                  id="reload-appointments"
-                  style="margin-left: 10px"
-                >
-                  <i class="fas fa-sync-alt"></i> Odśwież rezerwacje
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div id="calendar"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal rezerwacji -->
-    <div id="appointment-modal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Dodaj nową rezerwację</h3>
-          <button class="close-modal" id="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="appointment-form">
-            <div class="form-group">
-              <label for="client-name">Imię i nazwisko klienta</label>
-              <input type="text" id="client-name" required />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="appointment-date">Data</label>
-                <input type="date" id="appointment-date" required />
-              </div>
-              <div class="form-group">
-                <label for="appointment-time">Godzina</label>
-                <input type="time" id="appointment-time" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="service-type">Usługa</label>
-              <select id="service-type" required>
-                <option value="">Wybierz usługę</option>
-                <option value="manicure-classic">
-                  Manicure Klasyczny (60 min)
-                </option>
-                <option value="manicure-hybrid">
-                  Manicure Hybrydowy (75 min)
-                </option>
-                <option value="pedicure-classic">
-                  Pedicure Klasyczny (60 min)
-                </option>
-                <option value="pedicure-hybrid">
-                  Pedicure Hybrydowy (90 min)
-                </option>
-                <option value="nail-art">Zdobienie paznokci (45 min)</option>
-                <option value="nail-extension">
-                  Przedłużanie paznokci (120 min)
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="client-phone">Telefon</label>
-              <input type="tel" id="client-phone" />
-            </div>
-            <div class="form-group">
-              <label for="appointment-notes">Dodatkowe uwagi</label>
-              <textarea id="appointment-notes" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-              <label for="appointment-status">Status</label>
-              <select id="appointment-status">
-                <option value="pending">Oczekująca</option>
-                <option value="confirmed">Potwierdzona</option>
-                <option value="cancelled">Anulowana</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" id="cancel-appointment">
-            Anuluj
-          </button>
-          <button class="btn btn-primary" id="save-appointment">Zapisz</button>
-        </div>
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
-    <script>
-      // Funkcja do dodawania przykładowych rezerwacji (przeniesiona na poziom globalny)
-      function addHardcodedAppointments(calendar) {
-        console.log("Dodaję przykładowe rezerwacje na stałe");
-
-        // Aktualny miesiąc i rok
-        const today = new Date();
-        const currentMonth = today.getMonth() + 1;
-        const currentYear = today.getFullYear();
-        const currentDay = today.getDate();
-
-        // Format dat
-        const formatNumber = (num) => num.toString().padStart(2, "0");
-
-        // Stałe rezerwacje na bieżący miesiąc
-        const hardCodedAppointments = [
-          {
-            id: "hardcoded-1",
-            title: "Anna Kowalska - Manicure Hybrydowy",
-            start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay + 1
-            )}T10:00:00`,
-            end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay + 1
-            )}T11:15:00`,
-            backgroundColor: "#845ef7",
-            borderColor: "#845ef7",
-          },
-          {
-            id: "hardcoded-2",
-            title: "Maria Nowak - Pedicure Hybrydowy",
-            start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay + 2
-            )}T14:30:00`,
-            end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay + 2
-            )}T16:00:00`,
-            backgroundColor: "#fab005",
-            borderColor: "#fab005",
-          },
-          {
-            id: "hardcoded-3",
-            title: "Katarzyna Wiśniewska - Przedłużanie paznokci",
-            start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay
-            )}T11:00:00`,
-            end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay
-            )}T13:00:00`,
-            backgroundColor: "#845ef7",
-            borderColor: "#845ef7",
-          },
-          {
-            id: "hardcoded-4",
-            title: "Zofia Lis - Zdobienie paznokci",
-            start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay + 3
-            )}T16:00:00`,
-            end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay + 3
-            )}T17:30:00`,
-            backgroundColor: "#845ef7",
-            borderColor: "#845ef7",
-          },
-          {
-            id: "hardcoded-5",
-            title: "Aleksandra Dąbrowska - Manicure Klasyczny",
-            start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay - 1
-            )}T10:00:00`,
-            end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(
-              currentDay - 1
-            )}T11:00:00`,
-            backgroundColor: "#fa5252",
-            borderColor: "#fa5252",
-          },
-        ];
-
-        // Dodaj każdą rezerwację do kalendarza
-        hardCodedAppointments.forEach((appointment) => {
-          calendar.addEvent(appointment);
-        });
-
-        console.log(
-          "Dodano stałe rezerwacje do kalendarza:",
-          hardCodedAppointments.length
-        );
-      }
-
-      // Funkcja do wczytywania rezerwacji ze strony głównej (przeniesiona na poziom globalny)
-      function loadAppointmentsFromLocalStorage(calendar) {
-        try {
-          // Pobierz zapisane rezerwacje
-          const savedAppointmentsJSON =
-            localStorage.getItem("salonAppointments");
-          console.log(
-            "Próba wczytania rezerwacji z localStorage. Dane:",
-            savedAppointmentsJSON
-          );
-
-          if (!savedAppointmentsJSON) {
-            console.log("Brak zapisanych rezerwacji w localStorage");
-            // TESTOWE DANE - dodaj przykładową rezerwację jeśli nie ma żadnych
-            const testAppointment = {
-              id: "test-" + Date.now(),
-              clientName: "Testowy Klient",
-              clientEmail: "test@example.com",
-              clientPhone: "123456789",
-              serviceType: "gel-manicure",
-              serviceName: "Manicure Hybrydowy (75 min)",
-              date: new Date().toISOString().split("T")[0], // Dzisiejsza data
-              time: "14:00", // Godzina 14:00
-              notes: "Rezerwacja testowa - automatycznie wygenerowana",
-              status: "pending",
-            };
-
-            // Zapisz testową rezerwację
-            const testAppointments = [testAppointment];
-            localStorage.setItem(
-              "salonAppointments",
-              JSON.stringify(testAppointments)
-            );
-            console.log("Utworzono testową rezerwację:", testAppointment);
-
-            // Dodaj wydarzenie do kalendarza
-            addAppointmentToCalendar(testAppointment, 0, calendar);
-            return;
-          }
-
-          // Próba naprawy zepsutego formatu JSON
-          let savedAppointments;
-          try {
-            savedAppointments = JSON.parse(savedAppointmentsJSON);
-          } catch (jsonError) {
-            console.error("Błąd parsowania JSON, próba naprawy:", jsonError);
-            // Próba naprawy - usuń nieprawidłowe znaki
-            const cleanedJSON = savedAppointmentsJSON.replace(
-              /[^\x20-\x7E]/g,
-              ""
-            );
-            try {
-              savedAppointments = JSON.parse(cleanedJSON);
-            } catch (e) {
-              console.error(
-                "Nie udało się naprawić JSON. Używam pustej tablicy."
-              );
-              savedAppointments = [];
-            }
-          }
-
-          // Upewnij się, że mamy tablicę
-          if (!Array.isArray(savedAppointments)) {
-            console.error("Dane rezerwacji nie są tablicą:", savedAppointments);
-            savedAppointments = [];
-          }
-
-          console.log(
-            "Pomyślnie sparsowano dane, liczba rezerwacji:",
-            savedAppointments.length
-          );
-
-          // Dodaj każdą rezerwację do kalendarza
-          savedAppointments.forEach((appointment, index) => {
-            addAppointmentToCalendar(appointment, index, calendar);
-          });
-
-          console.log(
-            "Załadowano " +
-              savedAppointments.length +
-              " rezerwacji ze strony głównej"
-          );
-        } catch (error) {
-          console.error("Błąd podczas wczytywania rezerwacji:", error);
-        }
-      }
-
-      // Pomocnicza funkcja do dodawania rezerwacji do kalendarza (przeniesiona na poziom globalny)
-      function addAppointmentToCalendar(appointment, index, calendar) {
-        console.log(`Przetwarzanie rezerwacji #${index + 1}:`, appointment);
-
-        try {
-          // Przygotuj dane rezerwacji dla kalendarza
-
-          // Sprawdź, czy mamy wszystkie potrzebne dane
-          if (
-            !appointment.date ||
-            !appointment.time ||
-            !appointment.clientName
-          ) {
-            console.error("Niepełne dane rezerwacji:", appointment);
-            return;
-          }
-
-          // Pobierz czas trwania usługi
-          let durationMinutes = 60; // Domyślnie 60 minut
-          if (appointment.serviceName) {
-            const durationMatch =
-              appointment.serviceName.match(/\((\d+)\s*min\)/);
-            if (durationMatch) {
-              durationMinutes = parseInt(durationMatch[1]);
-            }
-          }
-
-          // Ustal kolor wydarzenia na podstawie statusu
-          let backgroundColor = "#845ef7"; // domyślny kolor (potwierdzona)
-          if (appointment.status === "pending") {
-            backgroundColor = "#fab005"; // oczekująca
-          } else if (appointment.status === "cancelled") {
-            backgroundColor = "#fa5252"; // anulowana
-          }
-
-          // Ustaw czas rozpoczęcia i zakończenia
-          const startDateTime = `${appointment.date}T${appointment.time}:00`;
-
-          // Oblicz czas zakończenia - obsłuż różne formaty daty
-          let endTime;
-          try {
-            endTime = new Date(`${appointment.date}T${appointment.time}`);
-            endTime.setMinutes(endTime.getMinutes() + durationMinutes);
-            const endDateTime = endTime.toISOString().replace(/\.\d+Z$/, "");
-
-            // Dodaj wydarzenie do kalendarza
-            const eventData = {
-              id: appointment.id || "lsappt-" + Date.now() + "-" + index,
-              title: `${appointment.clientName} - ${
-                appointment.serviceName || "Rezerwacja"
-              }`,
-              start: startDateTime,
-              end: endDateTime,
-              backgroundColor: backgroundColor,
-              borderColor: backgroundColor,
-              extendedProps: {
-                email: appointment.clientEmail,
-                phone: appointment.clientPhone,
-                notes: appointment.notes,
-                status: appointment.status,
-              },
-            };
-
-            const eventAdded = calendar.addEvent(eventData);
-            console.log("Dodano wydarzenie do kalendarza:", eventAdded.title);
-          } catch (dateError) {
-            console.error(
-              "Błąd przetwarzania daty rezerwacji:",
-              dateError,
-              "Dane rezerwacji:",
-              appointment
-            );
-
-            // Alternatywne podejście - użyj dzisiejszej daty i godziny jako fallback
-            try {
-              const today = new Date();
-              const fallbackDate = today.toISOString().split("T")[0];
-              const fallbackTime = "12:00";
-              const fallbackStart = `${fallbackDate}T${fallbackTime}:00`;
-
-              today.setHours(12);
-              today.setMinutes(0);
-              today.setMinutes(today.getMinutes() + durationMinutes);
-              const fallbackEnd = today.toISOString().replace(/\.\d+Z$/, "");
-
-              // Dodaj wydarzenie do kalendarza z datą awaryjną
-              const eventData = {
-                id: appointment.id || "fallback-" + Date.now() + "-" + index,
-                title: `[BŁĄD DATY] ${appointment.clientName} - ${
-                  appointment.serviceName || "Rezerwacja"
-                }`,
-                start: fallbackStart,
-                end: fallbackEnd,
-                backgroundColor: "#fa5252", // czerwony dla błędnych dat
-                borderColor: "#fa5252",
-                extendedProps: {
-                  email: appointment.clientEmail,
-                  phone: appointment.clientPhone,
-                  notes: `[BŁĄD DATY] ${appointment.notes || ""}`,
-                  status: "error",
-                },
-              };
-
-              const eventAdded = calendar.addEvent(eventData);
-              console.log(
-                "Dodano wydarzenie awaryjne do kalendarza:",
-                eventAdded.title
-              );
-            } catch (fallbackError) {
-              console.error(
-                "Nie udało się dodać nawet awaryjnego wydarzenia:",
-                fallbackError
-              );
-            }
-          }
-        } catch (processError) {
-          console.error("Błąd podczas przetwarzania rezerwacji:", processError);
-        }
-      }
-
-      // Sprawdź, czy użytkownik jest zalogowany - używamy JEDNEGO spójnego klucza
-      window.onload = function () {
-        // Debugowanie localStorage - sprawdź wszystkie zapisane dane
-        console.log("===== DEBUG LOCALSTORAGE =====");
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          const value = localStorage.getItem(key);
-          console.log(`${key}: ${value}`);
-        }
-        console.log("============================");
-
-        // Sprawdź, czy mamy dane rezerwacji
-        const salonAppointments = localStorage.getItem("salonAppointments");
-        console.log(
-          "Dane rezerwacji bezpośrednio z localStorage:",
-          salonAppointments
-        );
-
-        // Standardowa weryfikacja logowania
-        const isLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
-        if (!isLoggedIn) {
-          console.log(
-            "Użytkownik nie jest zalogowany, przekierowuję do strony logowania"
-          );
-          window.location.href = "login.html";
-        } else {
-          console.log("Użytkownik zalogowany, wyświetlam panel");
-          document.body.style.display = "block";
-
-          // Upewnij się, że kalendarz zostanie zainicjalizowany po załadowaniu strony
-          setTimeout(function () {
-            if (typeof FullCalendar === "undefined") {
-              console.error(
-                "Biblioteka FullCalendar nie jest dostępna. Próba ponownego załadowania..."
-              );
-              loadFullCalendarDynamically();
-            } else {
-              initializeCalendar();
-            }
-          }, 100);
-        }
-      };
-
-      // Funkcja do dynamicznego załadowania FullCalendar
-      function loadFullCalendarDynamically() {
-        const script = document.createElement("script");
-        script.src =
-          "https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js";
-        script.onload = function () {
-          console.log("Biblioteka FullCalendar została załadowana dynamicznie");
-          initializeCalendar();
-        };
-        document.head.appendChild(script);
-      }
-
-      // Inicjalizacja kalendarza
-      function initializeCalendar() {
-        const calendarEl = document.getElementById("calendar");
-        if (!calendarEl) {
-          console.error("Element kalendarza nie został znaleziony");
-          return;
-        }
-
-        // Zapewnij, że kontener jest widoczny
-        calendarEl.style.display = "block";
-        calendarEl.style.minHeight = "600px";
-        calendarEl.style.visibility = "visible";
-        calendarEl.style.border = "1px solid #eee";
-        calendarEl.style.padding = "15px";
-        console.log("Inicjalizacja kalendarza - element:", calendarEl);
-
-        try {
-          console.log("Tworzenie kalendarza bez lokalizacji");
-
-          // Stwórz kalendarz bez opcji locale
-          const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: "timeGridWeek",
-            headerToolbar: {
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
-            },
-            buttonText: {
-              today: "Dzisiaj",
-              month: "Miesiąc",
-              week: "Tydzień",
-              day: "Dzień",
-              list: "Lista",
-            },
-            dayHeaderFormat: { weekday: "short" },
-            titleFormat: { year: "numeric", month: "long" },
-            firstDay: 1, // Poniedziałek jako pierwszy dzień
-            slotMinTime: "09:00:00",
-            slotMaxTime: "20:00:00",
-            slotDuration: "00:30:00",
-            allDaySlot: false,
-            height: "auto",
-            contentHeight: 650,
-            aspectRatio: 1.8,
-            expandRows: true,
-            stickyHeaderDates: true,
-            handleWindowResize: true,
-            businessHours: {
-              daysOfWeek: [1, 2, 3, 4, 5, 6],
-              startTime: "09:00",
-              endTime: "20:00",
-            },
-            eventTimeFormat: {
-              hour: "2-digit",
-              minute: "2-digit",
-              meridiem: false,
-              hour12: false,
-            },
-            slotLabelFormat: {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false,
-            },
-            nowIndicator: true,
-            navLinks: true,
-            selectable: true,
-            selectMirror: true,
-            editable: true,
-            dayMaxEvents: true,
-            eventClick: function (info) {
-              alert("Rezerwacja: " + info.event.title);
-            },
-            select: function (info) {
-              document.getElementById("appointment-date").value =
-                info.startStr.split("T")[0];
-              if (info.startStr.includes("T")) {
-                const startTime = info.startStr.split("T")[1].substring(0, 5);
-                document.getElementById("appointment-time").value = startTime;
-              }
-              openModal();
-            },
-          });
-
-          // Renderuj kalendarz
-          console.log("Renderowanie kalendarza");
-          calendar.render();
-          console.log("Kalendarz został pomyślnie zainicjalizowany");
-
-          // Funkcja naprawiająca ramki kalendarza
-          function fixCalendarBorders() {
-            console.log("Naprawianie ramek kalendarza");
-
-            // Dodaj ramki do głównych elementów
-            document
-              .querySelectorAll(
-                ".fc-scrollgrid, .fc-theme-standard td, .fc-theme-standard th"
-              )
-              .forEach((el) => {
-                el.style.border = "1px solid #ddd";
-              });
-
-            // Napraw nagłówki kolumn
-            document.querySelectorAll(".fc-col-header-cell").forEach((el) => {
-              el.style.border = "1px solid #ddd";
-              el.style.backgroundColor = "#f8f9fa";
-            });
-
-            // Napraw komórki dni
-            document
-              .querySelectorAll(".fc-daygrid-day, .fc-timegrid-slot")
-              .forEach((el) => {
-                el.style.border = "1px solid #ddd";
-              });
-
-            console.log("Ramki kalendarza zostały naprawione");
-          }
-
-          // Wywołaj naprawę ramek kalendarza po krótkim opóźnieniu
-          setTimeout(fixCalendarBorders, 100);
-
-          // Dodaj przykładowe rezerwacje
-          addHardcodedAppointments(calendar);
-
-          // Załaduj rezerwacje ze strony głównej
-          loadAppointmentsFromLocalStorage(calendar);
-
-          // Zapisz referencję do kalendarza w obiekcie globalnym, aby był dostępny dla innych funkcji
-          window.calendarInstance = calendar;
-        } catch (error) {
-          console.error("Błąd podczas inicjalizacji kalendarza:", error);
-          calendarEl.innerHTML = `
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Kalendarz Rezerwacji - Panel Administracyjny</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="admin-style.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+		<style>
+			body {
+				display: none; /* Ukryj treść na początku, zostanie pokazana po sprawdzeniu logowania */
+			}
+
+			/* Dodatkowe styles dla kalendarza */
+			#calendar {
+				min-height: 650px;
+				margin-bottom: 20px;
+				border: 1px solid #ddd !important;
+			}
+
+			/* Dodatkowe wymuszone styles dla ramek kalendarza */
+			.fc-theme-standard .fc-scrollgrid {
+				border: 1px solid #ddd !important;
+			}
+
+			.fc-theme-standard td,
+			.fc-theme-standard th {
+				border: 1px solid #ddd !important;
+			}
+
+			.fc-scrollgrid-section-header > th {
+				border: 1px solid #ddd !important;
+				background-color: #f8f9fa !important;
+			}
+
+			.fc-col-header-cell {
+				background-color: #f8f9fa !important;
+			}
+
+			.fc-day,
+			.fc-day-top,
+			.fc-daygrid-day {
+				border: 1px solid #ddd !important;
+			}
+
+			.fc-timegrid-slot {
+				border-bottom: 1px solid #ddd !important;
+				height: 40px !important;
+			}
+
+			.dashboard-card.full-width {
+				padding-bottom: 20px;
+			}
+
+			.card-body {
+				padding: 15px;
+				overflow: auto;
+			}
+
+			.fc-timegrid-slot {
+				height: 40px !important;
+			}
+
+			.fc-col-header-cell {
+				padding: 10px 0;
+				background-color: #f8f9fa;
+				font-weight: 600;
+			}
+
+			.fc-timegrid-slot-label {
+				font-weight: 500;
+			}
+
+			.fc-daygrid-day-number,
+			.fc-col-header-cell-cushion {
+				padding: 8px;
+				color: #212529;
+				text-decoration: none;
+			}
+
+			.fc-event {
+				padding: 2px 4px;
+				border-radius: 4px;
+				font-size: 13px;
+				cursor: pointer;
+			}
+
+			.fc .fc-button-primary {
+				background-color: #845ef7;
+				border-color: #845ef7;
+			}
+
+			.fc .fc-button-primary:hover {
+				background-color: #7048e8;
+				border-color: #7048e8;
+			}
+
+			.fc .fc-button-primary:not(:disabled).fc-button-active,
+			.fc .fc-button-primary:not(:disabled):active {
+				background-color: #7048e8;
+				border-color: #7048e8;
+			}
+
+			/* Styl dla dziś */
+			.fc .fc-daygrid-day.fc-day-today,
+			.fc .fc-timegrid-col.fc-day-today {
+				background-color: rgba(132, 94, 247, 0.1);
+			}
+
+			/* Responsywność kalendarza */
+			@media (max-width: 768px) {
+				#calendar {
+					min-height: 500px;
+				}
+
+				.fc-toolbar.fc-header-toolbar {
+					flex-direction: column;
+					gap: 10px;
+				}
+
+				.fc-toolbar-chunk {
+					display: flex;
+					justify-content: center;
+				}
+			}
+
+			/* Mobilne styles dla poprawy responsywności */
+			@media (max-width: 768px) {
+				/* Zmniejsz i dostosuj sidebar */
+				.sidebar {
+					width: 220px;
+					transform: translateX(-100%);
+					z-index: 1050;
+					transition: transform 0.3s ease;
+					box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+				}
+
+				.sidebar.mobile-show {
+					transform: translateX(0);
+				}
+
+				/* Usuń margines dla głównej treści gdy sidebar jest schowany */
+				.main-content {
+					margin-left: 0 !important;
+					width: 100% !important;
+					transition: margin-left 0.3s ease;
+				}
+
+				/* Dodaj przycisk menu hamburger dla widoku mobilnego */
+				.mobile-menu-toggle {
+					display: flex !important;
+					position: fixed;
+					top: 10px;
+					left: 10px;
+					z-index: 1060;
+					background-color: var(--primary-color);
+					color: white;
+					border: none;
+					border-radius: 50%;
+					width: 40px;
+					height: 40px;
+					align-items: center;
+					justify-content: center;
+					box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+				}
+
+				/* Dostosowanie headera */
+				.header {
+					padding: 0 15px;
+				}
+
+				.header-left h2 {
+					font-size: 16px;
+				}
+
+				.search-box {
+					display: none;
+				}
+
+				/* Zmniejsz paddingów */
+				.content {
+					padding: 15px;
+				}
+
+				/* Poprawki dla FullCalendar */
+				.fc .fc-toolbar.fc-header-toolbar {
+					flex-direction: column;
+					gap: 10px;
+					margin-bottom: 10px;
+				}
+
+				.fc .fc-toolbar-title {
+					font-size: 1.2em;
+				}
+
+				/* Modyfikacja modala */
+				.modal-content {
+					width: 95%;
+					max-width: 350px;
+				}
+
+				/* Popraw wygląd formularza */
+				.form-row {
+					grid-template-columns: 1fr;
+				}
+
+				/* Dodatkowe poprawki dla mobile */
+				.user-dropdown-menu {
+					right: -10px;
+					width: 180px;
+				}
+
+				.notification-dropdown {
+					right: -140px;
+					width: 280px;
+				}
+			}
+
+			/* Ukryj menu toggle domyślnie */
+			.mobile-menu-toggle {
+				display: none;
+			}
+
+			/* Stylizacja dla wydarzeń w kalendarzu */
+			.fc-event {
+				cursor: pointer;
+				transition: all 0.2s ease;
+			}
+
+			.fc-event:hover {
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+				transform: translateY(-2px);
+			}
+
+			/* Ikona edycji na hover dla wydarzeń */
+			.fc-event:hover::after {
+				content: '\f044'; /* Ikona edycji */
+				font-family: 'Font Awesome 5 Free';
+				font-weight: 900;
+				position: absolute;
+				top: 2px;
+				right: 2px;
+				background: rgba(255, 255, 255, 0.8);
+				color: #333;
+				padding: 2px;
+				border-radius: 3px;
+				font-size: 10px;
+			}
+
+			/* Style dla przycisków akcji */
+			.btn {
+				padding: 8px 16px;
+				border-radius: 4px;
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				border: none;
+			}
+
+			.btn-secondary {
+				background-color: #f1f3f5;
+				color: #495057;
+			}
+
+			.btn-secondary:hover {
+				background-color: #e9ecef;
+			}
+
+			.btn-primary {
+				background-color: #845ef7;
+				color: white;
+			}
+
+			.btn-primary:hover {
+				background-color: #7048e8;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			/* Style dla modalu */
+			.modal-footer {
+				display: flex;
+				justify-content: flex-end;
+				gap: 10px;
+				padding: 15px 20px;
+				border-top: 1px solid #e9ecef;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Dodajemy przycisk menu dla widoku mobilnego -->
+		<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+			<i class="fas fa-bars"></i>
+		</button>
+
+		<!-- Tło przyciemniające dla menu mobilnego -->
+		<div class="menu-backdrop" id="menuBackdrop"></div>
+
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<div class="logo">
+					<i class="fas fa-spa"></i>
+					<span>BeautyAdmin</span>
+				</div>
+				<div class="sidebar-nav">
+					<ul>
+						<li>
+							<a href="dashboard.html">
+								<i class="fas fa-tachometer-alt"></i>
+								<span>Dashboard</span>
+							</a>
+						</li>
+						<li class="active">
+							<a href="calendar.html">
+								<i class="fas fa-calendar-alt"></i>
+								<span>Kalendarz</span>
+							</a>
+						</li>
+						<li>
+							<a href="clients.html">
+								<i class="fas fa-users"></i>
+								<span>Klienci</span>
+							</a>
+						</li>
+						<li>
+							<a href="services.html">
+								<i class="fas fa-list-alt"></i>
+								<span>Usługi</span>
+							</a>
+						</li>
+						<li>
+							<a href="statistics.html">
+								<i class="fas fa-chart-bar"></i>
+								<span>Statystyki</span>
+							</a>
+						</li>
+						<li>
+							<a href="settings.html">
+								<i class="fas fa-cog"></i>
+								<span>Ustawienia</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="sidebar-footer">
+					<a href="../index.html">
+						<i class="fas fa-sign-out-alt"></i>
+						<span>Powrót do strony</span>
+					</a>
+				</div>
+			</div>
+
+			<!-- Main Content -->
+			<div class="main-content">
+				<div class="main-header">
+					<div class="header-search">
+						<i class="fas fa-search"></i>
+						<input type="text" placeholder="Szukaj..." />
+					</div>
+					<div class="header-user">
+						<div class="notifications">
+							<i class="fas fa-bell"></i>
+							<span class="notification-badge">3</span>
+						</div>
+						<div class="user-info">
+							<span>Admin</span>
+							<i class="fas fa-user-circle"></i>
+						</div>
+					</div>
+				</div>
+
+				<div class="dashboard-content">
+					<h1>Kalendarz Rezerwacji</h1>
+
+					<div class="dashboard-card full-width">
+						<div class="card-header">
+							<h3>Kalendarz Rezerwacji</h3>
+							<div class="card-actions">
+								<button class="btn btn-primary" id="add-appointment">
+									<i class="fas fa-plus"></i> Dodaj rezerwację
+								</button>
+								<button class="btn btn-secondary" id="reload-appointments" style="margin-left: 10px">
+									<i class="fas fa-sync-alt"></i> Odśwież rezerwacje
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div id="calendar"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal rezerwacji -->
+		<div id="appointment-modal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Dodaj nową rezerwację</h3>
+					<button class="close-modal" id="close-modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form id="appointment-form">
+						<div class="form-group">
+							<label for="client-name">Imię i nazwisko klienta</label>
+							<input type="text" id="client-name" required />
+						</div>
+						<div class="form-row">
+							<div class="form-group">
+								<label for="appointment-date">Data</label>
+								<input type="date" id="appointment-date" required />
+							</div>
+							<div class="form-group">
+								<label for="appointment-time">Godzina</label>
+								<input type="time" id="appointment-time" required />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="service-type">Usługa</label>
+							<select id="service-type" required>
+								<option value="">Wybierz usługę</option>
+								<option value="manicure-classic">Manicure Klasyczny (60 min)</option>
+								<option value="manicure-hybrid">Manicure Hybrydowy (75 min)</option>
+								<option value="pedicure-classic">Pedicure Klasyczny (60 min)</option>
+								<option value="pedicure-hybrid">Pedicure Hybrydowy (90 min)</option>
+								<option value="nail-art">Zdobienie paznokci (45 min)</option>
+								<option value="nail-extension">Przedłużanie paznokci (120 min)</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="client-phone">Telefon</label>
+							<input type="tel" id="client-phone" placeholder="np. 123-456-789" />
+						</div>
+						<div class="form-group">
+							<label for="appointment-notes">Dodatkowe uwagi</label>
+							<textarea id="appointment-notes" rows="3" placeholder="Dodatkowe informacje o rezerwacji"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="appointment-status">Status</label>
+							<select id="appointment-status">
+								<option value="pending">Oczekująca</option>
+								<option value="confirmed">Potwierdzona</option>
+								<option value="cancelled">Anulowana</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" id="cancel-appointment">Anuluj</button>
+					<button class="btn btn-primary" id="save-appointment">
+						<i class="fas fa-save"></i> <span id="save-button-text">Zapisz</span>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
+		<script>
+			// Funkcja do dodawania przykładowych rezerwacji (przeniesiona na poziom globalny)
+			function addHardcodedAppointments(calendar) {
+				console.log('Dodaję przykładowe rezerwacje na stałe')
+
+				// Aktualny miesiąc i rok
+				const today = new Date()
+				const currentMonth = today.getMonth() + 1
+				const currentYear = today.getFullYear()
+				const currentDay = today.getDate()
+
+				// Format dat
+				const formatNumber = num => num.toString().padStart(2, '0')
+
+				// Stałe rezerwacje na bieżący miesiąc
+				const hardCodedAppointments = [
+					{
+						id: 'hardcoded-1',
+						title: 'Anna Kowalska - Manicure Hybrydowy',
+						start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 1)}T10:00:00`,
+						end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 1)}T11:15:00`,
+						backgroundColor: '#845ef7',
+						borderColor: '#845ef7',
+					},
+					{
+						id: 'hardcoded-2',
+						title: 'Maria Nowak - Pedicure Hybrydowy',
+						start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 2)}T14:30:00`,
+						end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 2)}T16:00:00`,
+						backgroundColor: '#fab005',
+						borderColor: '#fab005',
+					},
+					{
+						id: 'hardcoded-3',
+						title: 'Katarzyna Wiśniewska - Przedłużanie paznokci',
+						start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}T11:00:00`,
+						end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay)}T13:00:00`,
+						backgroundColor: '#845ef7',
+						borderColor: '#845ef7',
+					},
+					{
+						id: 'hardcoded-4',
+						title: 'Zofia Lis - Zdobienie paznokci',
+						start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 3)}T16:00:00`,
+						end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay + 3)}T17:30:00`,
+						backgroundColor: '#845ef7',
+						borderColor: '#845ef7',
+					},
+					{
+						id: 'hardcoded-5',
+						title: 'Aleksandra Dąbrowska - Manicure Klasyczny',
+						start: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay - 1)}T10:00:00`,
+						end: `${currentYear}-${formatNumber(currentMonth)}-${formatNumber(currentDay - 1)}T11:00:00`,
+						backgroundColor: '#fa5252',
+						borderColor: '#fa5252',
+					},
+				]
+
+				// Dodaj każdą rezerwację do kalendarza
+				hardCodedAppointments.forEach(appointment => {
+					calendar.addEvent(appointment)
+				})
+
+				console.log('Dodano stałe rezerwacje do kalendarza:', hardCodedAppointments.length)
+			}
+
+			// Funkcja do wczytywania rezerwacji ze strony głównej (przeniesiona na poziom globalny)
+			function loadAppointmentsFromLocalStorage(calendar) {
+				try {
+					// Pobierz zapisane rezerwacje
+					const savedAppointmentsJSON = localStorage.getItem('salonAppointments')
+					console.log('Próba wczytania rezerwacji z localStorage. Dane:', savedAppointmentsJSON)
+
+					if (!savedAppointmentsJSON) {
+						console.log('Brak zapisanych rezerwacji w localStorage')
+						// TESTOWE DANE - dodaj przykładową rezerwację jeśli nie ma żadnych
+						const testAppointment = {
+							id: 'test-' + Date.now(),
+							clientName: 'Testowy Klient',
+							clientEmail: 'test@example.com',
+							clientPhone: '123456789',
+							serviceType: 'gel-manicure',
+							serviceName: 'Manicure Hybrydowy (75 min)',
+							date: new Date().toISOString().split('T')[0], // Dzisiejsza data
+							time: '14:00', // Godzina 14:00
+							notes: 'Rezerwacja testowa - automatycznie wygenerowana',
+							status: 'pending',
+						}
+
+						// Zapisz testową rezerwację
+						const testAppointments = [testAppointment]
+						localStorage.setItem('salonAppointments', JSON.stringify(testAppointments))
+						console.log('Utworzono testową rezerwację:', testAppointment)
+
+						// Dodaj wydarzenie do kalendarza
+						addAppointmentToCalendar(testAppointment, 0, calendar)
+						return
+					}
+
+					// Próba naprawy zepsutego formatu JSON
+					let savedAppointments
+					try {
+						savedAppointments = JSON.parse(savedAppointmentsJSON)
+					} catch (jsonError) {
+						console.error('Błąd parsowania JSON, próba naprawy:', jsonError)
+						// Próba naprawy - usuń nieprawidłowe znaki
+						const cleanedJSON = savedAppointmentsJSON.replace(/[^\x20-\x7E]/g, '')
+						try {
+							savedAppointments = JSON.parse(cleanedJSON)
+						} catch (e) {
+							console.error('Nie udało się naprawić JSON. Używam pustej tablicy.')
+							savedAppointments = []
+						}
+					}
+
+					// Upewnij się, że mamy tablicę
+					if (!Array.isArray(savedAppointments)) {
+						console.error('Dane rezerwacji nie są tablicą:', savedAppointments)
+						savedAppointments = []
+					}
+
+					console.log('Pomyślnie sparsowano dane, liczba rezerwacji:', savedAppointments.length)
+
+					// Dodaj każdą rezerwację do kalendarza
+					savedAppointments.forEach((appointment, index) => {
+						addAppointmentToCalendar(appointment, index, calendar)
+					})
+
+					console.log('Załadowano ' + savedAppointments.length + ' rezerwacji ze strony głównej')
+				} catch (error) {
+					console.error('Błąd podczas wczytywania rezerwacji:', error)
+				}
+			}
+
+			// Pomocnicza funkcja do dodawania rezerwacji do kalendarza (przeniesiona na poziom globalny)
+			function addAppointmentToCalendar(appointment, index, calendar) {
+				console.log(`Przetwarzanie rezerwacji #${index + 1}:`, appointment)
+
+				try {
+					// Przygotuj dane rezerwacji dla kalendarza
+
+					// Sprawdź, czy mamy wszystkie potrzebne dane
+					if (!appointment.date || !appointment.time || !appointment.clientName) {
+						console.error('Niepełne dane rezerwacji:', appointment)
+						return
+					}
+
+					// Pobierz czas trwania usługi
+					let durationMinutes = 60 // Domyślnie 60 minut
+					if (appointment.serviceName) {
+						const durationMatch = appointment.serviceName.match(/\((\d+)\s*min\)/)
+						if (durationMatch) {
+							durationMinutes = parseInt(durationMatch[1])
+						}
+					}
+
+					// Ustal kolor wydarzenia na podstawie statusu
+					let backgroundColor = '#845ef7' // domyślny kolor (potwierdzona)
+					if (appointment.status === 'pending') {
+						backgroundColor = '#fab005' // oczekująca
+					} else if (appointment.status === 'cancelled') {
+						backgroundColor = '#fa5252' // anulowana
+					}
+
+					// Ustaw czas rozpoczęcia i zakończenia
+					const startDateTime = `${appointment.date}T${appointment.time}:00`
+
+					// Oblicz czas zakończenia - obsłuż różne formaty daty
+					let endTime
+					try {
+						endTime = new Date(`${appointment.date}T${appointment.time}`)
+						endTime.setMinutes(endTime.getMinutes() + durationMinutes)
+						const endDateTime = endTime.toISOString().replace(/\.\d+Z$/, '')
+
+						// Dodaj wydarzenie do kalendarza
+						const eventData = {
+							id: appointment.id || 'lsappt-' + Date.now() + '-' + index,
+							title: `${appointment.clientName} - ${appointment.serviceName || 'Rezerwacja'}`,
+							start: startDateTime,
+							end: endDateTime,
+							backgroundColor: backgroundColor,
+							borderColor: backgroundColor,
+							extendedProps: {
+								email: appointment.clientEmail,
+								phone: appointment.clientPhone,
+								notes: appointment.notes,
+								status: appointment.status,
+							},
+						}
+
+						const eventAdded = calendar.addEvent(eventData)
+						console.log('Dodano wydarzenie do kalendarza:', eventAdded.title)
+					} catch (dateError) {
+						console.error('Błąd przetwarzania daty rezerwacji:', dateError, 'Dane rezerwacji:', appointment)
+
+						// Alternatywne podejście - użyj dzisiejszej daty i godziny jako fallback
+						try {
+							const today = new Date()
+							const fallbackDate = today.toISOString().split('T')[0]
+							const fallbackTime = '12:00'
+							const fallbackStart = `${fallbackDate}T${fallbackTime}:00`
+
+							today.setHours(12)
+							today.setMinutes(0)
+							today.setMinutes(today.getMinutes() + durationMinutes)
+							const fallbackEnd = today.toISOString().replace(/\.\d+Z$/, '')
+
+							// Dodaj wydarzenie do kalendarza z datą awaryjną
+							const eventData = {
+								id: appointment.id || 'fallback-' + Date.now() + '-' + index,
+								title: `[BŁĄD DATY] ${appointment.clientName} - ${appointment.serviceName || 'Rezerwacja'}`,
+								start: fallbackStart,
+								end: fallbackEnd,
+								backgroundColor: '#fa5252', // czerwony dla błędnych dat
+								borderColor: '#fa5252',
+								extendedProps: {
+									email: appointment.clientEmail,
+									phone: appointment.clientPhone,
+									notes: `[BŁĄD DATY] ${appointment.notes || ''}`,
+									status: 'error',
+								},
+							}
+
+							const eventAdded = calendar.addEvent(eventData)
+							console.log('Dodano wydarzenie awaryjne do kalendarza:', eventAdded.title)
+						} catch (fallbackError) {
+							console.error('Nie udało się dodać nawet awaryjnego wydarzenia:', fallbackError)
+						}
+					}
+				} catch (processError) {
+					console.error('Błąd podczas przetwarzania rezerwacji:', processError)
+				}
+			}
+
+			// Sprawdź, czy użytkownik jest zalogowany - używamy JEDNEGO spójnego klucza
+			window.onload = function () {
+				// Debugowanie localStorage - sprawdź wszystkie zapisane dane
+				console.log('===== DEBUG LOCALSTORAGE =====')
+				for (let i = 0; i < localStorage.length; i++) {
+					const key = localStorage.key(i)
+					const value = localStorage.getItem(key)
+					console.log(`${key}: ${value}`)
+				}
+				console.log('============================')
+
+				// Sprawdź, czy mamy dane rezerwacji
+				const salonAppointments = localStorage.getItem('salonAppointments')
+				console.log('Dane rezerwacji bezpośrednio z localStorage:', salonAppointments)
+
+				// Standardowa weryfikacja logowania
+				const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true'
+				if (!isLoggedIn) {
+					console.log('Użytkownik nie jest zalogowany, przekierowuję do strony logowania')
+					window.location.href = 'login.html'
+				} else {
+					console.log('Użytkownik zalogowany, wyświetlam panel')
+					document.body.style.display = 'block'
+
+					// Upewnij się, że kalendarz zostanie zainicjalizowany po załadowaniu strony
+					setTimeout(function () {
+						if (typeof FullCalendar === 'undefined') {
+							console.error('Biblioteka FullCalendar nie jest dostępna. Próba ponownego załadowania...')
+							loadFullCalendarDynamically()
+						} else {
+							initializeCalendar()
+						}
+					}, 100)
+				}
+			}
+
+			// Funkcja do dynamicznego załadowania FullCalendar
+			function loadFullCalendarDynamically() {
+				const script = document.createElement('script')
+				script.src = 'https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'
+				script.onload = function () {
+					console.log('Biblioteka FullCalendar została załadowana dynamicznie')
+					initializeCalendar()
+				}
+				document.head.appendChild(script)
+			}
+
+			// Inicjalizacja kalendarza
+			function initializeCalendar() {
+				const calendarEl = document.getElementById('calendar')
+				if (!calendarEl) {
+					console.error('Element kalendarza nie został znaleziony')
+					return
+				}
+
+				// Zapewnij, że kontener jest widoczny
+				calendarEl.style.display = 'block'
+				calendarEl.style.minHeight = '600px'
+				calendarEl.style.visibility = 'visible'
+				calendarEl.style.border = '1px solid #eee'
+				calendarEl.style.padding = '15px'
+				console.log('Inicjalizacja kalendarza - element:', calendarEl)
+
+				try {
+					console.log('Tworzenie kalendarza bez lokalizacji')
+
+					// Stwórz kalendarz bez opcji locale
+					const calendar = new FullCalendar.Calendar(calendarEl, {
+						initialView: 'timeGridWeek',
+						headerToolbar: {
+							left: 'prev,next today',
+							center: 'title',
+							right: 'dayGridMonth,timeGridWeek,timeGridDay',
+						},
+						buttonText: {
+							today: 'Dzisiaj',
+							month: 'Miesiąc',
+							week: 'Tydzień',
+							day: 'Dzień',
+							list: 'Lista',
+						},
+						dayHeaderFormat: { weekday: 'long' },
+						titleFormat: { year: 'numeric', month: 'long' },
+						firstDay: 1, // Poniedziałek jako pierwszy dzień
+						locale: 'pl',
+						slotMinTime: '09:00:00',
+						slotMaxTime: '20:00:00',
+						slotDuration: '00:30:00',
+						allDaySlot: false,
+						height: 'auto',
+						contentHeight: 650,
+						aspectRatio: 1.8,
+						expandRows: true,
+						stickyHeaderDates: true,
+						handleWindowResize: true,
+						businessHours: {
+							daysOfWeek: [1, 2, 3, 4, 5, 6],
+							startTime: '09:00',
+							endTime: '20:00',
+						},
+						eventTimeFormat: {
+							hour: '2-digit',
+							minute: '2-digit',
+							meridiem: false,
+							hour12: false,
+						},
+						slotLabelFormat: {
+							hour: '2-digit',
+							minute: '2-digit',
+							hour12: false,
+						},
+						nowIndicator: true,
+						navLinks: true,
+						selectable: true,
+						selectMirror: true,
+						editable: true,
+						dayMaxEvents: true,
+						eventClick: function (info) {
+							// Pokaż modal z danymi wybranego wydarzenia
+							editEvent(info.event)
+						},
+						select: function (info) {
+							document.getElementById('appointment-date').value = info.startStr.split('T')[0]
+							if (info.startStr.includes('T')) {
+								const startTime = info.startStr.split('T')[1].substring(0, 5)
+								document.getElementById('appointment-time').value = startTime
+							}
+							openModal()
+						},
+					})
+
+					// Renderuj kalendarz
+					console.log('Renderowanie kalendarza')
+					calendar.render()
+					console.log('Kalendarz został pomyślnie zainicjalizowany')
+
+					// Dodatkowe debugowanie
+					console.log('DEBUGOWANIE: sprawdzanie ustawień kalendarza:')
+					console.log('Czy kalendarz jest edytowalny:', calendar.getOption('editable'))
+					console.log('Czy można wybierać daty:', calendar.getOption('selectable'))
+					console.log('Sprawdzanie funkcji eventClick:', typeof calendar.getOption('eventClick'))
+
+					// Dodatkowy kod do wzmocnienia eventClick
+					document.addEventListener('click', function (e) {
+						const fcEvent = e.target.closest('.fc-event')
+						if (fcEvent) {
+							console.log('Wykryto kliknięcie na wydarzenie kalendarza przez event delegation')
+							// Znajdź ID wydarzenia
+							const eventId = fcEvent.getAttribute('data-event-id') || fcEvent.getAttribute('data-id')
+							if (eventId) {
+								// Znajdź wydarzenie w kalendarzu
+								const events = calendar.getEvents()
+								const clickedEvent = events.find(evt => evt.id === eventId)
+								if (clickedEvent) {
+									console.log('Znaleziono wydarzenie, wywołuję edycję:', clickedEvent)
+									editEvent(clickedEvent)
+								} else {
+									console.warn('Nie znaleziono wydarzenia o ID:', eventId)
+								}
+							} else {
+								// Jeśli nie ma ID, użyj innej metody identyfikacji
+								const eventTitle = fcEvent.textContent.trim()
+								const events = calendar.getEvents()
+								const clickedEvent = events.find(evt => evt.title.includes(eventTitle))
+								if (clickedEvent) {
+									console.log('Znaleziono wydarzenie po tytule:', clickedEvent)
+									editEvent(clickedEvent)
+								}
+							}
+						}
+					})
+
+					// Funkcja naprawiająca ramki kalendarza
+					function fixCalendarBorders() {
+						console.log('Naprawianie ramek kalendarza')
+
+						// Dodaj ramki do głównych elementów
+						document.querySelectorAll('.fc-scrollgrid, .fc-theme-standard td, .fc-theme-standard th').forEach(el => {
+							el.style.border = '1px solid #ddd'
+						})
+
+						// Napraw nagłówki kolumn
+						document.querySelectorAll('.fc-col-header-cell').forEach(el => {
+							el.style.border = '1px solid #ddd'
+							el.style.backgroundColor = '#f8f9fa'
+						})
+
+						// Napraw komórki dni
+						document.querySelectorAll('.fc-daygrid-day, .fc-timegrid-slot').forEach(el => {
+							el.style.border = '1px solid #ddd'
+						})
+
+						console.log('Ramki kalendarza zostały naprawione')
+					}
+
+					// Wywołaj naprawę ramek kalendarza po krótkim opóźnieniu
+					setTimeout(fixCalendarBorders, 100)
+
+					// Dodaj przykładowe rezerwacje
+					addHardcodedAppointments(calendar)
+
+					// Załaduj rezerwacje ze strony głównej
+					loadAppointmentsFromLocalStorage(calendar)
+
+					// Zapisz referencję do kalendarza w obiekcie globalnym, aby był dostępny dla innych funkcji
+					window.calendarInstance = calendar
+
+					// Dodatkowa polska lokalizacja po załadowaniu kalendarza
+					function polishCalendarLabels() {
+						// Tłumaczenie nazw dni tygodnia i miesięcy
+						document.querySelectorAll('.fc-col-header-cell-cushion').forEach(el => {
+							// Tłumaczenie skróconych nazw dni
+							const text = el.textContent
+							if (text === 'Sun') el.textContent = 'Niedz'
+							if (text === 'Mon') el.textContent = 'Pon'
+							if (text === 'Tue') el.textContent = 'Wt'
+							if (text === 'Wed') el.textContent = 'Śr'
+							if (text === 'Thu') el.textContent = 'Czw'
+							if (text === 'Fri') el.textContent = 'Pt'
+							if (text === 'Sat') el.textContent = 'Sob'
+
+							// Tłumaczenie pełnych nazw dni
+							if (text === 'Sunday') el.textContent = 'Niedziela'
+							if (text === 'Monday') el.textContent = 'Poniedziałek'
+							if (text === 'Tuesday') el.textContent = 'Wtorek'
+							if (text === 'Wednesday') el.textContent = 'Środa'
+							if (text === 'Thursday') el.textContent = 'Czwartek'
+							if (text === 'Friday') el.textContent = 'Piątek'
+							if (text === 'Saturday') el.textContent = 'Sobota'
+						})
+
+						// Tłumaczenie nagłówka z miesiącem i rokiem
+						const headerTitle = document.querySelector('.fc-toolbar-title')
+						if (headerTitle) {
+							const text = headerTitle.textContent
+							// Tłumaczenie miesięcy
+							headerTitle.textContent = text
+								.replace('January', 'Styczeń')
+								.replace('February', 'Luty')
+								.replace('March', 'Marzec')
+								.replace('April', 'Kwiecień')
+								.replace('May', 'Maj')
+								.replace('June', 'Czerwiec')
+								.replace('July', 'Lipiec')
+								.replace('August', 'Sierpień')
+								.replace('September', 'Wrzesień')
+								.replace('October', 'Październik')
+								.replace('November', 'Listopad')
+								.replace('December', 'Grudzień')
+						}
+
+						// Tłumaczenie przycisków
+						document.querySelectorAll('.fc-button').forEach(button => {
+							if (button.textContent === 'prev') button.textContent = 'Poprzedni'
+							if (button.textContent === 'next') button.textContent = 'Następny'
+						})
+					}
+
+					// Wywołanie funkcji tłumaczącej po załadowaniu kalendarza
+					setTimeout(polishCalendarLabels, 500)
+
+					// Obsługa zmiany widoku - uruchom tłumaczenie ponownie
+					document.addEventListener('click', function (e) {
+						if (e.target.closest('.fc-button')) {
+							setTimeout(polishCalendarLabels, 100)
+						}
+					})
+				} catch (error) {
+					console.error('Błąd podczas inicjalizacji kalendarza:', error)
+					calendarEl.innerHTML = `
             <div style="padding: 20px; text-align: center; color: red;">
               <p><i class="fas fa-exclamation-triangle"></i> Wystąpił błąd podczas ładowania kalendarza.</p>
               <p>${error.message}</p>
               <button onclick="initializeCalendar()" class="btn btn-primary">Załaduj ponownie</button>
             </div>
-          `;
-        }
-      }
+          `
+				}
+			}
 
-      // Dodaj obsługę wylogowania - używamy JEDNEGO spójnego klucza
-      document.addEventListener("DOMContentLoaded", function () {
-        const logoutLinks = document.querySelectorAll("a[href='login.html']");
-        logoutLinks.forEach((link) => {
-          link.addEventListener("click", function (e) {
-            localStorage.removeItem("adminLoggedIn");
-            console.log("Wylogowanie");
-          });
-        });
-      });
+			// Dodaj obsługę wylogowania - używamy JEDNEGO spójnego klucza
+			document.addEventListener('DOMContentLoaded', function () {
+				const logoutLinks = document.querySelectorAll("a[href='login.html']")
+				logoutLinks.forEach(link => {
+					link.addEventListener('click', function (e) {
+						localStorage.removeItem('adminLoggedIn')
+						console.log('Wylogowanie')
+					})
+				})
+			})
 
-      document.addEventListener("DOMContentLoaded", function () {
-        // Używamy funkcji zdefiniowanych globalnie
-        setTimeout(function () {
-          // Użyj globalnej instancji kalendarza jeśli jest dostępna
-          const calendar = window.calendarInstance;
-          if (calendar) {
-            console.log(
-              "Wykryto istniejącą instancję kalendarza, używam jej do dodawania wydarzeń"
-            );
+			document.addEventListener('DOMContentLoaded', function () {
+				// Używamy funkcji zdefiniowanych globalnie
+				setTimeout(function () {
+					// Użyj globalnej instancji kalendarza jeśli jest dostępna
+					const calendar = window.calendarInstance
+					if (calendar) {
+						console.log('Wykryto istniejącą instancję kalendarza, używam jej do dodawania wydarzeń')
 
-            // Dodaj stałe rezerwacje - używamy funkcji zdefiniowanej globalnie
-            addHardcodedAppointments(calendar);
+						// Upewnij się, że kalendarz jest widoczny
+						const calendarDiv = document.getElementById('calendar')
+						if (calendarDiv) {
+							calendarDiv.style.display = 'block'
+							calendarDiv.style.visibility = 'visible'
+						}
 
-            // Załaduj rezerwacje ze strony głównej - używamy funkcji zdefiniowanej globalnie
-            loadAppointmentsFromLocalStorage(calendar);
-          } else {
-            console.warn(
-              "Nie znaleziono instancji kalendarza w obiekcie globalnym"
-            );
+						// Zastosuj poprawki dla istniejących wydarzeń
+						const existingEvents = calendar.getEvents()
+						console.log('Liczba istniejących wydarzeń:', existingEvents.length)
 
-            // Próba znalezienia instancji FullCalendar w DOM
-            const fcElement = document.querySelector(".fc");
-            if (fcElement && typeof fcElement.calendar !== "undefined") {
-              console.log("Znaleziono instancję kalendarza w DOM");
-              addHardcodedAppointments(fcElement.calendar);
-              loadAppointmentsFromLocalStorage(fcElement.calendar);
-            } else {
-              console.warn(
-                "Nie znaleziono zainicjalizowanego kalendarza w DOM!"
-              );
-            }
-          }
-        }, 1000); // Daj trochę czasu na załadowanie kalendarza
+						// Sprawdź czy funkcja eventClick działa
+						console.log('Sprawdzanie konfiguracji eventClick:', typeof calendar.getOption('eventClick'))
 
-        // Dodaj predefiniowane wydarzenia na początku
-        let defaultEventsAdded = false;
+						// Nadpisz funkcję eventClick na wszelki wypadek
+						calendar.setOption('eventClick', function (info) {
+							console.log('Kliknięcie w wydarzenie zostało przechwycone przez setOption')
+							editEvent(info.event)
+						})
 
-        // Standardowe wydarzenia, które będą zawsze widoczne (możesz usunąć lub zmienić)
-        function addDefaultEvents(calendar) {
-          if (defaultEventsAdded) return;
+						existingEvents.forEach(event => {
+							// Upewnij się, że wydarzenia mają poprawne style
+							if (event.extendedProps && event.extendedProps.status) {
+								const element = event.el
+								if (element) {
+									element.setAttribute('data-status', event.extendedProps.status)
+									// Dodaj id wydarzenia jako data-attribute
+									element.setAttribute('data-event-id', event.id)
+									// Dodaj obsługę kliknięcia bezpośrednio na element
+									element.addEventListener('click', function () {
+										console.log('Kliknięcie w wydarzenie zostało przechwycone przez bezpośredni listener')
+										editEvent(event)
+									})
+								}
+							}
+						})
 
-          // Dodaj dzisiejszą datę
-          const today = new Date();
-          const currentMonth = today.getMonth() + 1;
-          const currentYear = today.getFullYear();
+						// Odśwież widok kalendarza
+						calendar.render()
+					} else {
+						console.warn('Nie znaleziono instancji kalendarza w obiekcie globalnym')
+						initializeCalendar() // Spróbuj zainicjalizować ponownie
+					}
+				}, 1000) // Daj trochę czasu na załadowanie kalendarza
 
-          // Dostosuj daty wydarzeń do bieżącego miesiąca
-          calendar.addEvent({
-            id: "default-1",
-            title: "Anna Kowalska - Manicure Hybrydowy",
-            start: `${currentYear}-${currentMonth
-              .toString()
-              .padStart(2, "0")}-15T10:00:00`,
-            end: `${currentYear}-${currentMonth
-              .toString()
-              .padStart(2, "0")}-15T11:15:00`,
-            backgroundColor: "#845ef7",
-            borderColor: "#845ef7",
-          });
+				// Obsługa modalu
+				const modal = document.getElementById('appointment-modal')
+				const addAppointmentBtn = document.getElementById('add-appointment')
+				const closeModalBtn = document.getElementById('close-modal')
+				const cancelBtn = document.getElementById('cancel-appointment')
+				const saveBtn = document.getElementById('save-appointment')
+				const appointmentForm = document.getElementById('appointment-form')
+				const reloadBtn = document.getElementById('reload-appointments')
 
-          calendar.addEvent({
-            id: "default-2",
-            title: "Maria Nowak - Pedicure Hybrydowy",
-            start: `${currentYear}-${currentMonth
-              .toString()
-              .padStart(2, "0")}-20T14:30:00`,
-            end: `${currentYear}-${currentMonth
-              .toString()
-              .padStart(2, "0")}-20T16:00:00`,
-            backgroundColor: "#845ef7",
-            borderColor: "#845ef7",
-          });
+				// Zmienna do przechowywania aktualnie edytowanego wydarzenia
+				let currentEditEvent = null
 
-          defaultEventsAdded = true;
-        }
+				// Funkcja do edycji istniejącego wydarzenia
+				function editEvent(event) {
+					console.log('Edytowanie wydarzenia - początek funkcji:', event)
 
-        // Jeśli nie ma rezerwacji, pokaż domyślne wydarzenia
-        setTimeout(() => {
-          const calendar = document.querySelector(".fc");
-          if (
-            calendar &&
-            calendar.getEvents &&
-            calendar.getEvents().length === 0
-          ) {
-            console.log("Brak rezerwacji - dodaję wydarzenia domyślne");
-            addDefaultEvents(calendar);
-          }
-        }, 500);
+					if (!event) {
+						console.error('Brak wydarzenia do edycji!')
+						return
+					}
 
-        // Obsługa modalu
-        const modal = document.getElementById("appointment-modal");
-        const addAppointmentBtn = document.getElementById("add-appointment");
-        const closeModalBtn = document.getElementById("close-modal");
-        const cancelBtn = document.getElementById("cancel-appointment");
-        const saveBtn = document.getElementById("save-appointment");
-        const appointmentForm = document.getElementById("appointment-form");
-        const reloadBtn = document.getElementById("reload-appointments");
+					// Dodatkowe debugowanie
+					console.log('Typ wydarzenia:', typeof event)
+					console.log('ID wydarzenia:', event.id)
+					console.log('Tytuł wydarzenia:', event.title)
+					console.log('Dostępne metody:', Object.keys(event))
+					console.log('Czy event jest instancją FullCalendar.EventApi:', event instanceof FullCalendar.EventApi)
 
-        // Dodaj przykładową rezerwację do kalendarza
-        function addSampleAppointment() {
-          // Dzisiejsza data
-          const today = new Date();
-          const todayISO = today.toISOString().split("T")[0];
+					try {
+						// Zapisz referencję do bieżącego wydarzenia
+						currentEditEvent = event
 
-          // Utwórz testową rezerwację - zawsze na godzinę 14:00 dzisiaj
-          const sampleAppointment = {
-            id: "sample-" + Date.now(),
-            clientName: "Maria Przykładowa",
-            clientEmail: "maria@example.com",
-            clientPhone: "555-123-456",
-            serviceType: "manicure-hybrid",
-            serviceName: "Manicure Hybrydowy (75 min)",
-            date: todayISO,
-            time: "14:00",
-            notes: "Przykładowa rezerwacja dodana manualnie",
-            status: "pending",
-          };
+						// Zmień tytuł modala
+						const modalTitle = document.querySelector('.modal-header h3')
+						if (modalTitle) modalTitle.textContent = 'Edytuj rezerwację'
 
-          console.log("Dodaję przykładową rezerwację:", sampleAppointment);
+						// Zmień tekst przycisku zapisz
+						const saveButtonText = document.getElementById('save-button-text')
+						if (saveButtonText) saveButtonText.textContent = 'Aktualizuj'
 
-          // Dodaj do kalendarza
-          addAppointmentToCalendar(sampleAppointment, 0);
+						// Wypełnij formularz danymi wydarzenia
+						const title = event.title
+						const clientName = title.split(' - ')[0].trim()
+						const clientNameInput = document.getElementById('client-name')
+						if (clientNameInput) clientNameInput.value = clientName
 
-          // Dodaj do localStorage
-          try {
-            let appointments =
-              JSON.parse(localStorage.getItem("salonAppointments")) || [];
-            appointments.push(sampleAppointment);
-            localStorage.setItem(
-              "salonAppointments",
-              JSON.stringify(appointments)
-            );
-            console.log("Zapisano przykładową rezerwację w localStorage");
-          } catch (error) {
-            console.error(
-              "Błąd podczas zapisywania przykładowej rezerwacji:",
-              error
-            );
-          }
+						// Ustaw datę i godzinę
+						const startDate = new Date(event.start)
+						const formatDate = startDate.toISOString().split('T')[0]
+						const formatTime = startDate.toTimeString().substring(0, 5)
 
-          alert("Dodano przykładową rezerwację na dzisiaj o 14:00");
-        }
+						const dateInput = document.getElementById('appointment-date')
+						const timeInput = document.getElementById('appointment-time')
+						if (dateInput) dateInput.value = formatDate
+						if (timeInput) timeInput.value = formatTime
 
-        function openModal() {
-          modal.style.display = "block";
-        }
+						// Ustaw usługę na podstawie tytułu
+						const serviceName = title.split(' - ')[1]?.trim()
+						const serviceTypeSelect = document.getElementById('service-type')
+						if (serviceTypeSelect) {
+							for (let i = 0; i < serviceTypeSelect.options.length; i++) {
+								if (serviceTypeSelect.options[i].text.includes(serviceName)) {
+									serviceTypeSelect.selectedIndex = i
+									break
+								}
+							}
+						}
 
-        function closeModal() {
-          modal.style.display = "none";
-          appointmentForm.reset();
-        }
+						// Wypełnij dodatkowe pola z extendedProps jeśli są dostępne
+						if (event.extendedProps) {
+							const phoneInput = document.getElementById('client-phone')
+							const notesInput = document.getElementById('appointment-notes')
+							const statusSelect = document.getElementById('appointment-status')
 
-        addAppointmentBtn.addEventListener("click", openModal);
-        closeModalBtn.addEventListener("click", closeModal);
-        cancelBtn.addEventListener("click", closeModal);
+							if (phoneInput && event.extendedProps.phone) {
+								phoneInput.value = event.extendedProps.phone
+							}
 
-        // Obsługa przycisku odświeżania rezerwacji
-        reloadBtn.addEventListener("click", function () {
-          // Pobierz aktualną instancję kalendarza
-          const currentCalendar = window.calendarInstance;
-          if (!currentCalendar) {
-            console.error("Brak dostępnej instancji kalendarza!");
-            alert("Nie można odświeżyć kalendarza - brak dostępnej instancji.");
-            return;
-          }
+							if (notesInput && event.extendedProps.notes) {
+								notesInput.value = event.extendedProps.notes
+							}
 
-          // Wyczyść istniejące wydarzenia
-          currentCalendar.removeAllEvents();
+							if (statusSelect && event.extendedProps.status) {
+								statusSelect.value = event.extendedProps.status
+							}
+						}
 
-          // Dodaj ponownie stałe rezerwacje
-          addHardcodedAppointments(currentCalendar);
+						// Otwórz modal
+						openModal()
+						console.log('Modal został otwarty dla edycji wydarzenia')
+					} catch (err) {
+						console.error('Błąd podczas edycji wydarzenia:', err)
+						alert('Wystąpił błąd podczas edycji rezerwacji. Spróbuj ponownie.')
+					}
+				}
 
-          // Załaduj ponownie rezerwacje z localStorage
-          loadAppointmentsFromLocalStorage(currentCalendar);
+				function openModal() {
+					modal.style.display = 'block'
+				}
 
-          // Dodaj ręcznie nową rezerwację (zostanie wyświetlona niezależnie od localStorage)
-          const today = new Date();
-          const tomorrow = new Date(today);
-          tomorrow.setDate(today.getDate() + 1);
+				function closeModal() {
+					modal.style.display = 'none'
+					appointmentForm.reset()
 
-          const manualAppointment = {
-            id: "manual-" + Date.now(),
-            title: "Elżbieta Nowak - Manicure Hybrydowy",
-            start: `${tomorrow.getFullYear()}-${(tomorrow.getMonth() + 1)
-              .toString()
-              .padStart(2, "0")}-${tomorrow
-              .getDate()
-              .toString()
-              .padStart(2, "0")}T12:00:00`,
-            end: `${tomorrow.getFullYear()}-${(tomorrow.getMonth() + 1)
-              .toString()
-              .padStart(2, "0")}-${tomorrow
-              .getDate()
-              .toString()
-              .padStart(2, "0")}T13:15:00`,
-            backgroundColor: "#fab005",
-            borderColor: "#fab005",
-          };
+					// Resetuj zmienną edytowanego wydarzenia
+					currentEditEvent = null
 
-          currentCalendar.addEvent(manualAppointment);
-          console.log("Dodano ręczną rezerwację:", manualAppointment);
+					// Przywróć domyślny tytuł modala
+					document.querySelector('.modal-header h3').textContent = 'Dodaj nową rezerwację'
 
-          alert("Kalendarz został odświeżony i dodano nową rezerwację.");
-        });
+					// Przywróć domyślny tekst przycisku zapisz
+					document.getElementById('save-button-text').textContent = 'Zapisz'
+				}
 
-        // Kliknięcie poza modalem zamyka go
-        window.addEventListener("click", function (event) {
-          if (event.target === modal) {
-            closeModal();
-          }
-        });
+				addAppointmentBtn.addEventListener('click', openModal)
+				closeModalBtn.addEventListener('click', closeModal)
+				cancelBtn.addEventListener('click', closeModal)
 
-        saveBtn.addEventListener("click", function () {
-          // Pobierz aktualną instancję kalendarza
-          const currentCalendar = window.calendarInstance;
-          if (!currentCalendar) {
-            console.error("Brak dostępnej instancji kalendarza!");
-            alert(
-              "Nie można dodać rezerwacji - brak dostępnej instancji kalendarza."
-            );
-            return;
-          }
+				// Obsługa przycisku odświeżania rezerwacji
+				reloadBtn.addEventListener('click', function () {
+					// Pobierz aktualną instancję kalendarza
+					const currentCalendar = window.calendarInstance
+					if (!currentCalendar) {
+						console.error('Brak dostępnej instancji kalendarza!')
+						alert('Nie można odświeżyć kalendarza - brak dostępnej instancji.')
+						return
+					}
 
-          const clientName = document.getElementById("client-name").value;
-          const appointmentDate =
-            document.getElementById("appointment-date").value;
-          const appointmentTime =
-            document.getElementById("appointment-time").value;
-          const serviceType = document.getElementById("service-type");
-          const serviceName =
-            serviceType.options[serviceType.selectedIndex].text;
-          const clientPhone = document.getElementById("client-phone").value;
-          const appointmentNotes =
-            document.getElementById("appointment-notes").value;
-          const status = document.getElementById("appointment-status").value;
+					// Wyczyść istniejące wydarzenia
+					currentCalendar.removeAllEvents()
 
-          if (
-            clientName &&
-            appointmentDate &&
-            appointmentTime &&
-            serviceType.value
-          ) {
-            // Pobierz czas trwania usługi z nazwy usługi
-            const durationMatch = serviceName.match(/\((\d+)\s*min\)/);
-            const durationMinutes = durationMatch
-              ? parseInt(durationMatch[1])
-              : 60;
+					// Dodaj ponownie stałe rezerwacje
+					addHardcodedAppointments(currentCalendar)
 
-            // Ustal kolor wydarzenia na podstawie statusu
-            let backgroundColor = "#845ef7"; // domyślny kolor (potwierdzona)
-            if (status === "pending") {
-              backgroundColor = "#fab005"; // oczekująca
-            } else if (status === "cancelled") {
-              backgroundColor = "#fa5252"; // anulowana
-            }
+					// Załaduj ponownie rezerwacje z localStorage
+					loadAppointmentsFromLocalStorage(currentCalendar)
 
-            // Stwórz czas rozpoczęcia i zakończenia
-            const startDateTime = `${appointmentDate}T${appointmentTime}:00`;
-            const endDateTime = new Date(
-              new Date(`${appointmentDate}T${appointmentTime}`).getTime() +
-                durationMinutes * 60 * 1000
-            )
-              .toISOString()
-              .replace(/\.\d+Z$/, "");
+					// Dodaj ręcznie nową rezerwację (zostanie wyświetlona niezależnie od localStorage)
+					const today = new Date()
+					const tomorrow = new Date(today)
+					tomorrow.setDate(today.getDate() + 1)
 
-            // Dodaj wydarzenie do kalendarza
-            const newEventId = Date.now().toString();
-            currentCalendar.addEvent({
-              id: newEventId,
-              title: `${clientName} - ${serviceName.split(" (")[0]}`,
-              start: startDateTime,
-              end: endDateTime,
-              backgroundColor: backgroundColor,
-              borderColor: backgroundColor,
-              extendedProps: {
-                phone: clientPhone,
-                notes: appointmentNotes,
-                status: status,
-              },
-            });
+					const manualAppointment = {
+						id: 'manual-' + Date.now(),
+						title: 'Elżbieta Nowak - Manicure Hybrydowy',
+						start: `${tomorrow.getFullYear()}-${(tomorrow.getMonth() + 1).toString().padStart(2, '0')}-${tomorrow
+							.getDate()
+							.toString()
+							.padStart(2, '0')}T12:00:00`,
+						end: `${tomorrow.getFullYear()}-${(tomorrow.getMonth() + 1).toString().padStart(2, '0')}-${tomorrow
+							.getDate()
+							.toString()
+							.padStart(2, '0')}T13:15:00`,
+						backgroundColor: '#fab005',
+						borderColor: '#fab005',
+					}
 
-            // Zapisz również w localStorage
-            try {
-              // Pobierz istniejące rezerwacje lub utwórz pustą tablicę
-              let appointments =
-                JSON.parse(localStorage.getItem("salonAppointments")) || [];
+					currentCalendar.addEvent(manualAppointment)
+					console.log('Dodano ręczną rezerwację:', manualAppointment)
 
-              // Dodaj nową rezerwację
-              const newAppointment = {
-                id: newEventId,
-                clientName: clientName,
-                clientPhone: clientPhone,
-                serviceType: serviceType.value,
-                serviceName: serviceName,
-                date: appointmentDate,
-                time: appointmentTime,
-                notes: appointmentNotes,
-                status: status,
-              };
+					alert('Kalendarz został odświeżony i dodano nową rezerwację.')
 
-              appointments.push(newAppointment);
+					// Wywołaj tłumaczenie etykiet po odświeżeniu kalendarza
+					setTimeout(polishCalendarLabels, 100)
+				})
 
-              // Zapisz z powrotem do localStorage
-              localStorage.setItem(
-                "salonAppointments",
-                JSON.stringify(appointments)
-              );
+				// Kliknięcie poza modalem zamyka go
+				window.addEventListener('click', function (event) {
+					if (event.target === modal) {
+						closeModal()
+					}
+				})
 
-              console.log("Rezerwacja zapisana w localStorage");
-            } catch (error) {
-              console.error(
-                "Błąd podczas zapisywania rezerwacji w localStorage:",
-                error
-              );
-            }
+				saveBtn.addEventListener('click', function () {
+					// Pobierz aktualną instancję kalendarza
+					const currentCalendar = window.calendarInstance
+					if (!currentCalendar) {
+						console.error('Brak dostępnej instancji kalendarza!')
+						alert('Nie można dodać rezerwacji - brak dostępnej instancji kalendarza.')
+						return
+					}
 
-            closeModal();
+					try {
+						const clientName = document.getElementById('client-name').value
+						const appointmentDate = document.getElementById('appointment-date').value
+						const appointmentTime = document.getElementById('appointment-time').value
+						const serviceType = document.getElementById('service-type')
+						const serviceName = serviceType.options[serviceType.selectedIndex].text
+						const clientPhone = document.getElementById('client-phone').value
+						const appointmentNotes = document.getElementById('appointment-notes').value
+						const status = document.getElementById('appointment-status').value
 
-            // Powiadomienie o dodaniu rezerwacji
-            alert("Rezerwacja została dodana!");
-          } else {
-            alert("Wypełnij wszystkie wymagane pola!");
-          }
-        });
+						if (clientName && appointmentDate && appointmentTime && serviceType.value) {
+							// Pobierz czas trwania usługi z nazwy usługi
+							const durationMatch = serviceName.match(/\((\d+)\s*min\)/)
+							const durationMinutes = durationMatch ? parseInt(durationMatch[1]) : 60
 
-        // Dodaj obsługę mobilnego menu
-        document.addEventListener("DOMContentLoaded", function () {
-          // Obsługa przycisku mobilnego menu
-          const mobileMenuToggle =
-            document.getElementById("mobile-menu-toggle");
-          const sidebar = document.querySelector(".sidebar");
+							// Ustal kolor wydarzenia na podstawie statusu
+							let backgroundColor = '#845ef7' // domyślny kolor (potwierdzona)
+							if (status === 'pending') {
+								backgroundColor = '#fab005' // oczekująca
+							} else if (status === 'cancelled') {
+								backgroundColor = '#fa5252' // anulowana
+							}
 
-          if (mobileMenuToggle && sidebar) {
-            mobileMenuToggle.addEventListener("click", function () {
-              sidebar.classList.toggle("mobile-show");
-            });
+							// Stwórz czas rozpoczęcia i zakończenia
+							const startDateTime = `${appointmentDate}T${appointmentTime}:00`
+							const endDateTime = new Date(
+								new Date(`${appointmentDate}T${appointmentTime}`).getTime() + durationMinutes * 60 * 1000
+							)
+								.toISOString()
+								.replace(/\.\d+Z$/, '')
 
-            // Zamknij sidebar po kliknięciu poza nim
-            document.addEventListener("click", function (event) {
-              if (
-                window.innerWidth <= 768 &&
-                !sidebar.contains(event.target) &&
-                event.target !== mobileMenuToggle
-              ) {
-                sidebar.classList.remove("mobile-show");
-              }
-            });
-          }
+							// Przygotuj dane wydarzenia
+							const eventData = {
+								title: `${clientName} - ${serviceName.split(' (')[0]}`,
+								start: startDateTime,
+								end: endDateTime,
+								backgroundColor: backgroundColor,
+								borderColor: backgroundColor,
+								extendedProps: {
+									phone: clientPhone,
+									notes: appointmentNotes,
+									status: status,
+								},
+							}
 
-          // Dostosuj widok kalendarza na mobile
-          function adjustCalendarForMobile() {
-            const calendar = document.querySelector(".fc");
-            if (calendar && window.innerWidth <= 768) {
-              const fcCalendar = calendar.fullCalendar;
-              if (fcCalendar && typeof fcCalendar.changeView === "function") {
-                fcCalendar.changeView("listWeek");
-              }
-            }
-          }
+							// Jeśli edytujemy istniejące wydarzenie
+							if (currentEditEvent) {
+								// Pobierz ID wydarzenia
+								const eventId = currentEditEvent.id
+								console.log('Zapisywanie edytowanego wydarzenia o ID:', eventId)
 
-          // Reaguj na zmiany rozmiaru ekranu
-          window.addEventListener("resize", function () {
-            adjustCalendarForMobile();
-          });
+								try {
+									// Usunąć stare wydarzenie
+									currentEditEvent.remove()
+									console.log('Usunięto stare wydarzenie')
 
-          // Uruchom przy inicjalizacji
-          adjustCalendarForMobile();
-        });
-      });
+									// Dodaj zaktualizowane wydarzenie z tym samym ID
+									eventData.id = eventId
+									const newEvent = currentCalendar.addEvent(eventData)
+									console.log('Dodano nowe wydarzenie z tym samym ID:', newEvent.id)
 
-      // Podwójne zabezpieczenie - załaduj FullCalendar ponownie, jeśli nie jest dostępny
-      window.addEventListener("load", function () {
-        setTimeout(function () {
-          if (typeof FullCalendar === "undefined") {
-            console.warn(
-              "FullCalendar nie jest dostępny po załadowaniu strony. Próba załadowania ponownie..."
-            );
-            const script = document.createElement("script");
-            script.src =
-              "https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js";
-            script.onload = function () {
-              console.log("FullCalendar został załadowany dynamicznie");
-              // Nie ładujemy skryptu lokalizacyjnego, który powoduje błąd
-              if (typeof initializeCalendar === "function") {
-                initializeCalendar();
-              }
-            };
-            document.head.appendChild(script);
-          }
+									// Dodaj obsługę klikalności dla nowego wydarzenia
+									setTimeout(function () {
+										if (newEvent.el) {
+											console.log('Dodawanie obsługi klikalności do nowego wydarzenia')
+											newEvent.el.style.cursor = 'pointer'
+											newEvent.el.setAttribute('data-event-id', eventId)
+											newEvent.el.addEventListener('click', function () {
+												console.log('Kliknięcie w nowe wydarzenie')
+												editEvent(newEvent)
+											})
+										} else {
+											console.warn('Brak elementu DOM dla nowego wydarzenia')
+										}
+									}, 100)
 
-          // Dodatkowa naprawa ramek po pełnym załadowaniu strony
-          function fixCalendarBordersAfterLoad() {
-            console.log(
-              "Dodatkowa naprawa ramek kalendarza po załadowaniu strony"
-            );
-            document
-              .querySelectorAll(
-                ".fc-scrollgrid, .fc-theme-standard td, .fc-theme-standard th"
-              )
-              .forEach((el) => {
-                el.style.border = "1px solid #ddd";
-              });
+									// Zaktualizuj wydarzenie w localStorage
+									try {
+										let appointments = JSON.parse(localStorage.getItem('salonAppointments')) || []
 
-            document.querySelectorAll(".fc-col-header-cell").forEach((el) => {
-              el.style.border = "1px solid #ddd";
-              el.style.backgroundColor = "#f8f9fa";
-            });
+										// Znajdź i zaktualizuj rezerwację o odpowiednim ID
+										const index = appointments.findIndex(appt => appt.id === eventId)
 
-            document
-              .querySelectorAll(".fc-daygrid-day, .fc-timegrid-slot")
-              .forEach((el) => {
-                el.style.border = "1px solid #ddd";
-              });
+										if (index !== -1) {
+											// Aktualizuj dane
+											appointments[index] = {
+												...appointments[index],
+												id: eventId,
+												clientName: clientName,
+												clientPhone: clientPhone,
+												serviceType: serviceType.value,
+												serviceName: serviceName,
+												date: appointmentDate,
+												time: appointmentTime,
+												notes: appointmentNotes,
+												status: status,
+											}
 
-            // Napraw główne kontenery
-            const calendarEl = document.getElementById("calendar");
-            if (calendarEl) {
-              calendarEl.style.border = "1px solid #ddd";
-            }
+											// Zapisz zaktualizowaną listę
+											localStorage.setItem('salonAppointments', JSON.stringify(appointments))
+											console.log('Zaktualizowano rezerwację w localStorage')
+										} else {
+											// Jeśli nie znaleziono, dodaj nową
+											appointments.push({
+												id: eventId,
+												clientName: clientName,
+												clientPhone: clientPhone,
+												serviceType: serviceType.value,
+												serviceName: serviceName,
+												date: appointmentDate,
+												time: appointmentTime,
+												notes: appointmentNotes,
+												status: status,
+											})
 
-            const calendarContainer = document.querySelector(
-              ".calendar-container"
-            );
-            if (calendarContainer) {
-              calendarContainer.style.border = "1px solid #ddd";
-            }
-          }
+											localStorage.setItem('salonAppointments', JSON.stringify(appointments))
+											console.log('Dodano nową rezerwację w localStorage (nie znaleziono oryginału)')
+										}
+									} catch (error) {
+										console.error('Błąd podczas aktualizacji rezerwacji w localStorage:', error)
+									}
 
-          // Wywołaj naprawę ramek po pełnym załadowaniu
-          fixCalendarBordersAfterLoad();
+									// Odśwież widok kalendarza
+									currentCalendar.render()
 
-          // Wywołaj jeszcze raz po krótkim opóźnieniu, aby naprawić ewentualne dynamicznie dodane elementy
-          setTimeout(fixCalendarBordersAfterLoad, 1000);
-        }, 500);
-      });
-    </script>
-  </body>
+									alert('Rezerwacja została zaktualizowana!')
+								} catch (removeError) {
+									console.error('Błąd podczas usuwania poprzedniego wydarzenia:', removeError)
+									alert('Wystąpił błąd podczas aktualizacji rezerwacji. Spróbuj ponownie odświeżyć stronę.')
+								}
+							} else {
+								// Dodaj nowe wydarzenie
+								const newEventId = Date.now().toString()
+								eventData.id = newEventId
+								const newEvent = currentCalendar.addEvent(eventData)
+
+								// Dodaj obsługę klikalności dla nowego wydarzenia
+								if (newEvent.el) {
+									newEvent.el.style.cursor = 'pointer'
+								}
+
+								// Zapisz również w localStorage
+								try {
+									// Pobierz istniejące rezerwacje lub utwórz pustą tablicę
+									let appointments = JSON.parse(localStorage.getItem('salonAppointments')) || []
+
+									// Dodaj nową rezerwację
+									const newAppointment = {
+										id: newEventId,
+										clientName: clientName,
+										clientPhone: clientPhone,
+										serviceType: serviceType.value,
+										serviceName: serviceName,
+										date: appointmentDate,
+										time: appointmentTime,
+										notes: appointmentNotes,
+										status: status,
+									}
+
+									appointments.push(newAppointment)
+
+									// Zapisz z powrotem do localStorage
+									localStorage.setItem('salonAppointments', JSON.stringify(appointments))
+
+									console.log('Rezerwacja zapisana w localStorage')
+								} catch (error) {
+									console.error('Błąd podczas zapisywania rezerwacji w localStorage:', error)
+								}
+
+								// Odśwież widok kalendarza
+								currentCalendar.render()
+
+								alert('Rezerwacja została dodana!')
+							}
+
+							closeModal()
+						} else {
+							alert('Wypełnij wszystkie wymagane pola!')
+						}
+					} catch (err) {
+						console.error('Błąd podczas zapisywania rezerwacji:', err)
+						alert('Wystąpił błąd podczas zapisywania rezerwacji. Spróbuj ponownie.')
+					}
+				})
+
+				// Dodaj obsługę mobilnego menu
+				document.addEventListener('DOMContentLoaded', function () {
+					// Obsługa przycisku mobilnego menu
+					const mobileMenuToggle = document.getElementById('mobile-menu-toggle')
+					const sidebar = document.querySelector('.sidebar')
+
+					if (mobileMenuToggle && sidebar) {
+						mobileMenuToggle.addEventListener('click', function () {
+							sidebar.classList.toggle('mobile-show')
+						})
+
+						// Zamknij sidebar po kliknięciu poza nim
+						document.addEventListener('click', function (event) {
+							if (window.innerWidth <= 768 && !sidebar.contains(event.target) && event.target !== mobileMenuToggle) {
+								sidebar.classList.remove('mobile-show')
+							}
+						})
+					}
+
+					// Dostosuj widok kalendarza na mobile
+					function adjustCalendarForMobile() {
+						const calendar = document.querySelector('.fc')
+						if (calendar && window.innerWidth <= 768) {
+							const fcCalendar = calendar.fullCalendar
+							if (fcCalendar && typeof fcCalendar.changeView === 'function') {
+								fcCalendar.changeView('listWeek')
+							}
+						}
+					}
+
+					// Reaguj na zmiany rozmiaru ekranu
+					window.addEventListener('resize', function () {
+						adjustCalendarForMobile()
+					})
+
+					// Uruchom przy inicjalizacji
+					adjustCalendarForMobile()
+				})
+			})
+
+			// Podwójne zabezpieczenie - załaduj FullCalendar ponownie, jeśli nie jest dostępny
+			window.addEventListener('load', function () {
+				setTimeout(function () {
+					if (typeof FullCalendar === 'undefined') {
+						console.warn('FullCalendar nie jest dostępny po załadowaniu strony. Próba załadowania ponownie...')
+						const script = document.createElement('script')
+						script.src = 'https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'
+						script.onload = function () {
+							console.log('FullCalendar został załadowany dynamicznie')
+							// Nie ładujemy skryptu lokalizacyjnego, który powoduje błąd
+							if (typeof initializeCalendar === 'function') {
+								initializeCalendar()
+							}
+						}
+						document.head.appendChild(script)
+					}
+
+					// Dodatkowa naprawa ramek po pełnym załadowaniu strony
+					function fixCalendarBordersAfterLoad() {
+						console.log('Dodatkowa naprawa ramek kalendarza po załadowaniu strony')
+						document.querySelectorAll('.fc-scrollgrid, .fc-theme-standard td, .fc-theme-standard th').forEach(el => {
+							el.style.border = '1px solid #ddd'
+						})
+
+						document.querySelectorAll('.fc-col-header-cell').forEach(el => {
+							el.style.border = '1px solid #ddd'
+							el.style.backgroundColor = '#f8f9fa'
+						})
+
+						document.querySelectorAll('.fc-daygrid-day, .fc-timegrid-slot').forEach(el => {
+							el.style.border = '1px solid #ddd'
+						})
+
+						// Napraw główne kontenery
+						const calendarEl = document.getElementById('calendar')
+						if (calendarEl) {
+							calendarEl.style.border = '1px solid #ddd'
+						}
+
+						const calendarContainer = document.querySelector('.calendar-container')
+						if (calendarContainer) {
+							calendarContainer.style.border = '1px solid #ddd'
+						}
+					}
+
+					// Wywołaj naprawę ramek po pełnym załadowaniu
+					fixCalendarBordersAfterLoad()
+
+					// Wywołaj jeszcze raz po krótkim opóźnieniu, aby naprawić ewentualne dynamicznie dodane elementy
+					setTimeout(fixCalendarBordersAfterLoad, 1000)
+				}, 500)
+			})
+		</script>
+	</body>
 </html>
